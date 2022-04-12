@@ -1,0 +1,12 @@
+You are given an array A of size N. You need to print elements of A in alternate order (starting from index 0).
+
+void print(int ar[], int n)
+{
+    
+    for(int i=0;i<n;i+=2)
+    {
+        cout<<ar[i]<<" ";
+    }
+    
+    
+}
