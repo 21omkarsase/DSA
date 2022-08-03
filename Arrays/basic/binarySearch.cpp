@@ -12,7 +12,7 @@ class Solution
 public:
     int binarysearch(int arr[], int n, int k)
     {
-        // code here
+        // ***********************************TIME COMPLEXITY O(logN)***************************
 
         int low = 0;
         int high = n - 1;

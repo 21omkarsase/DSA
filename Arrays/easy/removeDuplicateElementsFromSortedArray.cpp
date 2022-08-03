@@ -154,6 +154,16 @@ public:
             j++;
         }
         return i + 1;
+
+        // int ans = n;
+        // for (int i = 1; i < n; i++)
+        // {
+        //     if (a[i] == a[i - 1])
+        //         ans--;
+        // }
+        // cout << ans << " ";
+        // cout << endl;
+        // return ans;
     }
 };
 

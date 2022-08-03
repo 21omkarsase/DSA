@@ -39,7 +39,7 @@
 //             for (int j = i; j < n; j++)
 //             {
 //                 vector<int> v;
-//                 for (int k = i; k < j; k++)
+//                 for (int k = i; k <= j; k++)
 //                 {
 //                     v.push_back(A[k]);
 //                 }
