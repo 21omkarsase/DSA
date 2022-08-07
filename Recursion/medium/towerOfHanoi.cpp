@@ -70,7 +70,7 @@ public:
             calculateDiscs(source, helper, dest, n - 1, ans); // calling for n-1 disks from source to helper
             ans++;
             cout << "move disk " << (n) << " from rod " << source << " to rod " << dest << endl;
-            calculateDiscs(helper, dest, source, n - 1, ans); // calling for n-1 disks from source to helper
+            calculateDiscs(helper, dest, source, n - 1, ans); // calling for n-1 disks from helper to destination
         }
     }
 
