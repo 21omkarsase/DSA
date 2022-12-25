@@ -1,0 +1,20 @@
+1.Directed Graph
+   directed edge (uni or bi)
+   Cyclic or acyclic(DAG)
+
+2.Undirected Graph
+   Bidirectional edge
+
+Path : Node can't appear twice in path
+
+Degree Of Graph :
+	For unidirected : no. of edges connected to it
+	                  2*E (E -> No. of nodes)
+    For directed : 
+    (a)Indegree : No. of edges going inside node
+    (b)Outdegree: No. of edges going outside from node
+
+Weights :
+default one
+
+
