@@ -18,3 +18,12 @@ Weights :
 default one
 
 
+DAG --> directed graph in a single direction without forming cycles in it
+
+Bipartite Graph
+   Graph in which we can color all its nodes using two colors such that no two adjacent nodes have same color
+
+   Linear graph (with no cycle) are always bipartite
+
+   Any graph with even cycle length is bipartite
+   -- | -- | -- | odd cycle length is not bipartite

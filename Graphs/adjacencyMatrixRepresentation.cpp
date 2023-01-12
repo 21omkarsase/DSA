@@ -11,6 +11,8 @@ void generateUndirectedGraph(){
 		cin>>v>>u;
 		adj[u][v]=1;
 		adj[v][u]=1;
+		//for weighted graph adj[u][v]=wt;
+						   //adj[v][u]=wt;
 	}
     cout<<"**********Undirected Graph**************\n";
 	for(int i=1;i<n+1;i++){
@@ -29,6 +31,9 @@ void generateDirectedGraph(){
 		cin>>u>>v;
 		adj[u].push_back(v);
 		adj[v].push_back(u);
+		//for directed graph use array of type vector<pair<int,int>>
+		//adj[u].push_back({v,wt})
+		//adj[v].push_back({u,wt})
 	}
 	cout<<"**********Directed Graph**************\n";
 	for(int i=1;i<n+1;i++){
@@ -41,7 +46,7 @@ void generateDirectedGraph(){
 }
 
 int main(){
-	generateUndirectedGraph();
-	// generateDirectedGraph();
+	// generateUndirectedGraph();
+	generateDirectedGraph();
 	return 0;
 }
