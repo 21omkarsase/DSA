@@ -81,6 +81,41 @@ class Solution
 	    }
 	    return ans;
     }
+    // vector<int> topoSort(int V, vector<int> adj[]) 
+    // {
+    //     //Only possible in DAG
+        
+    //     queue<int>q;
+    //     int inDegree[V]={0};
+        
+    //     for(int i=0;i<V;i++){
+    //         for(auto e:adj[i])
+    //            inDegree[e]++;
+    //     }
+    //    //  for(auto e : inDegree)cout<<e<<" : ";
+    // //      cout<<"\n";
+    //     for(int i=0;i<V;i++){
+    //         if(inDegree[i]==0)
+    //            q.push(i);
+    //     }
+    //     vector<int>ans;
+    //     while(!q.empty()){
+    //         int node=q.front();
+    //         q.pop();
+    //         for(auto e:adj[node]){
+    //             if(inDegree[e]>=1){
+    //                 inDegree[e]-=1;
+    //                 if(inDegree[e]==0)
+    //                    q.push(e);
+    //             }
+    //         }
+    //         ans.push_back(node);
+    //     }
+    //    // for(auto e : ans)cout<<e<<" : ";
+    // //      cout<<"\n";
+    //     return ans;
+    // }
+    
 };
 
 //{ Driver Code Starts.

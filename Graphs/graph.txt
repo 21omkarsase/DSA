@@ -27,3 +27,23 @@ Bipartite Graph
 
    Any graph with even cycle length is bipartite
    -- | -- | -- | odd cycle length is not bipartite
+
+Minimum Spanning Tree -->
+  Total n nodes
+  Total n-1 edges
+  All nodes must me reachable from other nodes
+
+*****************Disjoint Set*******************
+does two nodes belong to same component --> 
+
+dfs bfs time complexity --> o(v+e)
+disjoint set --> constant time (4*alpha)
+
+union -->
+ find by rank
+ find by size
+
+ find by rank
+   maintain rank and present array
+   serach for ultimate parent to get answer
+

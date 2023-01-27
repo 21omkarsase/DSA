@@ -57,6 +57,8 @@
 using namespace std;
 
 // } Driver Code Ends
+
+// **********************Dijkstras alogrithm will not work for graph with negative edge****************************
 class Solution
 {
 	public:
