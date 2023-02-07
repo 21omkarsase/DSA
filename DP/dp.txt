@@ -1,0 +1,12 @@
+Overlapping Problems
+Memoization --> store values of sub problems top to down
+
+Tabulation --> store values of sub problems down to top
+
+Space Optimization  
+
+1. express every thing in terms of indexes
+
+2. explore all possible ways
+
+3. sum up all the ways
