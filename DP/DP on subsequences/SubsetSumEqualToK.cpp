@@ -17,7 +17,7 @@ bool subsetSumToKSpaceOptimization(int n, int k, vector<int> &arr) {
     for(int i = 1; i < n; i++){
         for(int j = 1; j <= k; j++){
             int take = false;
-            if(j >= arr[i])take = prev[j - arr[i]];
+            if(j >= arr[i]) take = prev[j - arr[i]];
             int notTake = prev[j];
             curr[j] = take || notTake;
         }

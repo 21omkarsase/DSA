@@ -104,4 +104,6 @@ int main(){
 
 	cout<<"Tabulation --> "<<findWaysTabulation(arr, k)<<"\n";
 
+    cout<<"Space Optimization --> "<<findWaysSpaceOptimization(arr, k)<<"\n";
+
 }
