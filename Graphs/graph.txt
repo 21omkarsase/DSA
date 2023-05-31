@@ -47,3 +47,22 @@ union -->
    maintain rank and present array
    serach for ultimate parent to get answer
 
+
+
+*******************Time Complexity*****************************
+
+1.DFS || BFS
+The time complexity of DFS is O(V + E), where V is the number of vertices and E is the number of edges. This is because DFS has to visit each vertex and edge in the graph at most once.
+
+2.Dijkstra's Alogorithm
+The time complexity of Dijkstra's algorithm in graphs is O((V + E) * log V), where V is the number of vertices and E is the number of edges. 
+This is because Dijkstra's algorithm uses a priority queue to keep track of the shortest paths to each vertex. 
+The priority queue has to be updated O(V + E) times, and each update takes O(log V) time.
+
+3.Bellman Form Algorithm
+The time complexity of Bellman-Ford algorithm in graphs is O(|V| * |E|), where |V| is the number of vertices and |E| is the number of edges. 
+This is because Bellman-Ford algorithm has to iterate over all of the edges in the graph |E| times, and each iteration takes O(|V|) time.
+
+4.Floyd Warshall
+The time complexity of Floyd-Warshall algorithm in graphs is O(|V|3), where |V| is the number of vertices. 
+This is because Floyd-Warshall algorithm has to iterate over all of the vertices in the graph |V| times, and for each iteration, it has to iterate over all of the edges in the graph |V| times.

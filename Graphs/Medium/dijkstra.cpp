@@ -1,12 +1,12 @@
 // Implementing Dijkstra Algorithm
+// Note: The Graph doesn't contain 
 // MediumAccuracy: 50.83%Submissions: 88K+Points: 4
 // Lamp
 // Stand out from the crowd. Prepare with Complete Interview Preparation  
 
 // Given a weighted, undirected and connected graph of V vertices and an adjacency list adj where adj[i] is a list of lists containing two integers where the first integer of each list j denotes there is edge between i and j , second integers corresponds to the weight of that  edge . You are given the source vertex S and You to Find the shortest distance of all the vertex's from the source vertex S. You have to return a list of integers denoting shortest distance between each node and Source vertex S.
 //  
-
-// Note: The Graph doesn't contain any negative weight cycle.
+any negative weight cycle.
 
 //  
 
@@ -164,3 +164,19 @@ int main()
 
 
 // } Driver Code Ends
+
+
+// Time Complexity:
+
+//     With a priority queue implementation, Dijkstra's algorithm has a time complexity of O((V + E) log V), where V is the number of vertices and E is the number of edges.
+//     In the worst case, the algorithm visits each vertex once (V iterations) and each edge once (E iterations) while maintaining the priority queue.
+//     Each insertion and deletion operation in the priority queue takes O(log V) time.
+//     Therefore, the overall time complexity is O((V + E) log V).
+
+// Space Complexity:
+
+//     The space complexity of Dijkstra's algorithm is O(V) because it uses a priority queue to store the vertices and their distances from the source vertex.
+//     Additionally, it requires space to store the distances from the source vertex to all other vertices, which is also O(V).
+//     Therefore, the overall space complexity is O(V).
+
+// In summary, the time complexity of Dijkstra's algorithm is O((V + E) log V) and the space complexity is O(V).

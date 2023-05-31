@@ -67,27 +67,45 @@ class Solution {
     *   S: source vertex to start traversing graph with
     *   V: number of vertices
     */
+
+    //implementation only work for directed graph 
+    //so convert undirected graph to directed first
     vector<int> bellman_ford(int V, vector<vector<int>>& edges, int S) {
         vector<int>dist(V,1e8);
         dist[S]=0;
+
+        // relax all nodes for n - 1 times (n --> no. of nodes)
+        // relaxation : 
+        // e.g (u : 1 -> v : 3  (w : 5))
+        // checking condition : 
+        // if(dist[u] + w < dis[v])
+                // dist[v] = dist[u] + w
+
+        //why n - 1 :
+        // in worst case we will need take n - 1 edges to travel from first node to last node
+
         for(int i=0;i<V-1;i++){
             for(auto it : edges){
                 int u = it[0];
                 int v = it[1];
                 int w = it[2];
                 
-                if(dist[u] != 1e8 && dist[u]+w<dist[v]){
-                    dist[v] = dist[u] +w;
+                if(dist[u] != 1e8 && dist[u] + w < dist[v]){
+                    dist[v] = dist[u] + w;
                 }
             }
         }
         
+
+
+        // this is n'th iteration to detect -ve cycle
         for(auto it : edges){
             int u = it[0];
             int v = it[1];
             int w = it[2];
             
             if(dist[u] != 1e8 && dist[u]+w<dist[v]){
+                //if value get's reduced here, then graph has -ve cycle in it.
                return {-1};
             }
         }
@@ -132,3 +150,20 @@ int main() {
 }
 
 // } Driver Code Ends
+
+// Time Complexity:
+
+//     The Bellman-Ford algorithm has a time complexity of O(V * E), where V is the number of vertices and E is the number of edges.
+//     In the worst case, the algorithm performs V-1 iterations, and in each iteration, it relaxes all E edges.
+//     The relaxation step compares and updates the distances of vertices, and it takes O(1) time for each edge.
+//     Therefore, the overall time complexity is O(V * E).
+
+// Space Complexity:
+
+//     The space complexity of the Bellman-Ford algorithm is O(V) because it requires an array to store the distances from the source vertex to all other vertices.
+//     Additionally, it may require space for additional arrays to store other information, such as the predecessor vertices or a flag indicating negative cycles.
+//     Therefore, the overall space complexity is O(V).
+
+// It's worth noting that if the graph is a dense graph, meaning that the number of edges is close to the maximum possible (V * (V - 1)), the time complexity of the Bellman-Ford algorithm becomes O(V^3). However, in a sparse graph, the time complexity remains O(V * E).
+
+// In summary, the time complexity of the Bellman-Ford algorithm is O(V * E) in general, and the space complexity is O(V).

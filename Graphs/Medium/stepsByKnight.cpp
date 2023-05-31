@@ -105,7 +105,8 @@ class Solution
 	    loop.push_back({-2,1});
 	    loop.push_back({-2,-1});
 	    
-	    int sx=start[0],sy=start[1],ex=end[0],ey=end[1];
+	    int sx = start[0], sy = start[1], ex = end[0], ey = end[1];
+	    
 	    queue<pair<int,int>>q;
 	    q.push({sx,sy});
 	    

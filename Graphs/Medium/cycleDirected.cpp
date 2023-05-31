@@ -5,23 +5,32 @@ using namespace std;
 // } Driver Code Ends
 class Solution {
   public:
-    bool cycleDetection(vector<int>adj[],int vis[],int dfs[],int curr){
-        vis[curr]=1;
-        dfs[curr]=1;
-        for(auto e : adj[curr]){
-            if(!vis[e]){
-                if(cycleDetection(adj,vis,dfs,e))return true;
-            }else if(dfs[e])return true;
+    bool dfs(vector<int> adj[], vector<bool> &vis, vector<bool> &pathVis, int node){
+        vis[node] = 1;
+        pathVis[node] = 1;
+        
+        for(auto adjNode : adj[node]){
+            if(!vis[adjNode]){
+                if(dfs(adj, vis, pathVis, adjNode))
+                    return true;
+            }else if(pathVis[adjNode]){
+                return true;
+            }
         }
-        dfs[curr]=0;
+        
+        pathVis[node] = 0;
         return false;
     }
+  public:
     bool isCyclic(int n, vector<int> adj[]) {
-        int vis[n]={0};
-        int dfs[n]={0};
-        for(int i=0;i<n;i++){
-            if(cycleDetection(adj,vis,dfs,i))return true;
+        vector<bool> vis(n, 0), pathVis(n, 0);
+        
+        for(int i = 0; i  < n; i++){
+            if(dfs(adj, vis, pathVis, i)){
+                return true;
+            }
         }
+        
         return false;
     }
 };

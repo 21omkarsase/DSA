@@ -47,20 +47,36 @@ using namespace std;
 
 class Solution {
   public:
+
+  //multiple source shortest path algorithm
+  //also detects -ve cycles
+  //in directed graph only(convert undirected to directed)
 	void shortest_distance(vector<vector<int>>&matrix){
 	    int n = matrix.size();
+
+	    //Initial cost matrix
 	    for(int i=0;i<n;i++){
 	        for(int j=0;j<n;j++){
 	            if(matrix[i][j]==-1)matrix[i][j]=1e9;
 	        }
 	    }
 	    
+
+	    // check for miniumm distance every node to every other node via all distinct nodes
 	    for(int k=0;k<n;k++){
 	        for(int i=0;i<n;i++){
 	            for(int j=0;j<n;j++){
 	                matrix[i][j]=min(matrix[i][j],matrix[i][k]+matrix[k][j]);
 	            }
 	        }
+	    }
+
+	    for(int i = 0; i < n; i++){
+	    	for(int j = 0; j < n; j++){
+	    		if(matrix[i][j] < 0){
+	    			cout<<"Negative cycle exists.\n";
+	    		}
+	    	}
 	    }
 	    
 	    for(int i=0;i<n;i++){
@@ -96,3 +112,20 @@ int main(){
 	return 0;
 }
 // } Driver Code Ends
+
+// Time Complexity:
+
+//     The Floyd-Warshall algorithm has a time complexity of O(V^3), where V is the number of vertices.
+//     The algorithm iterates over all pairs of vertices and considers each vertex as a potential intermediate vertex.
+//     In each iteration, the algorithm updates the shortest path between all pairs of vertices by considering the intermediate vertex.
+//     Therefore, the algorithm performs three nested loops, resulting in a time complexity of O(V^3).
+
+// Space Complexity:
+
+//     The space complexity of the Floyd-Warshall algorithm is O(V^2) because it requires a matrix to store the shortest distances between all pairs of vertices.
+//     The matrix has dimensions V x V to represent all possible pairs of vertices.
+//     Therefore, the overall space complexity is O(V^2).
+
+// It's important to note that the Floyd-Warshall algorithm is suitable for small to medium-sized graphs due to its cubic time complexity. For larger graphs, more efficient algorithms such as Dijkstra's algorithm or the Bellman-Ford algorithm may be preferred.
+
+// In summary, the time complexity of the Floyd-Warshall algorithm is O(V^3) and the space complexity is O(V^2).

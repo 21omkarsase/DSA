@@ -72,8 +72,7 @@ using namespace std;
 
 class Solution {
   public:
-    int shortestPath(vector<vector<int>> &grid, pair<int, int> source,
-                     pair<int, int> destination) {
+    int shortestPath(vector<vector<int>> &grid, pair<int, int> source, pair<int, int> destination) {
         int n=grid.size();
         int m=grid[0].size();
         

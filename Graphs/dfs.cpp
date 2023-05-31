@@ -1,12 +1,13 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-void dfs(vector<int> adj[],int vis[],int curr){
+void dfs(vector<int> adj[],int vis[],int curr, int &count){
+	count++;
     cout<<curr<<" : ";
     vis[curr]=1;
     for(auto e:adj[curr]){
     	if(!vis[e]){
-	    	dfs(adj,vis,e);
+	    	dfs(adj,vis,e, count);
 	    	vis[e]=1;
 	    }
     }
@@ -23,8 +24,11 @@ int main(){
 	}
 	vector<int>ans;
 	int vis[n+1]={0};
+     
+    int count = 0;
+	dfs(adj,vis,k,count);
 
-	dfs(adj,vis,k);
+	cout<<n<<" : "<<m<<" --> "<<count<<"\n";
 
 
 	return 0;

@@ -47,7 +47,6 @@
 // 2 ≤ V ≤ 104
 // 1 ≤ E ≤ (N*(N-1))/2
 
-
 //{ Driver Code Starts
 #include <bits/stdc++.h>
 using namespace std;
@@ -55,67 +54,28 @@ using namespace std;
 // } Driver Code Ends
 class Solution
 {
-	public:
-    void dfs(vector<int> adj[],int vis[],int curr,stack<int>&s){
+    public:
+    void dfs(vector<int> adj[],int vis[],int curr,vector<int> &ans){
         vis[curr]=1;
         for(auto e:adj[curr]){
             if(!vis[e]){
-              dfs(adj,vis,e,s);
+              dfs(adj,vis,e, ans);
             }  
         }
-        s.push(curr);
+        ans.push_back(curr);
     }
-	vector<int> topoSort(int V, vector<int> adj[]) 
-	{
-	    int vis[V];
-	    for(auto &e:vis)e=0;
-	    stack<int>s;
-	    for(int i=0;i<V;i++){
-	        if(!vis[i])
-    	        dfs(adj,vis,i,s);
-	    }
-	    vector<int>ans;
-	    while(!s.empty()){
-	        ans.push_back(s.top());
-	        s.pop();
-	    }
-	    return ans;
+    vector<int> topoSort(int V, vector<int> adj[]) 
+    {
+        int vis[V];
+        for(auto &e:vis)e=0;
+        vector<int> ans;
+        for(int i=0;i<V;i++){
+            if(!vis[i])
+                dfs(adj,vis,i, ans);
+        }
+        reverse(ans.begin(), ans.end());
+        return ans;
     }
-    // vector<int> topoSort(int V, vector<int> adj[]) 
-    // {
-    //     //Only possible in DAG
-        
-    //     queue<int>q;
-    //     int inDegree[V]={0};
-        
-    //     for(int i=0;i<V;i++){
-    //         for(auto e:adj[i])
-    //            inDegree[e]++;
-    //     }
-    //    //  for(auto e : inDegree)cout<<e<<" : ";
-    // //      cout<<"\n";
-    //     for(int i=0;i<V;i++){
-    //         if(inDegree[i]==0)
-    //            q.push(i);
-    //     }
-    //     vector<int>ans;
-    //     while(!q.empty()){
-    //         int node=q.front();
-    //         q.pop();
-    //         for(auto e:adj[node]){
-    //             if(inDegree[e]>=1){
-    //                 inDegree[e]-=1;
-    //                 if(inDegree[e]==0)
-    //                    q.push(e);
-    //             }
-    //         }
-    //         ans.push_back(node);
-    //     }
-    //    // for(auto e : ans)cout<<e<<" : ";
-    // //      cout<<"\n";
-    //     return ans;
-    // }
-    
 };
 
 //{ Driver Code Starts.

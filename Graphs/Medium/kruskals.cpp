@@ -164,3 +164,24 @@ int main()
 
 
 // } Driver Code Ends
+
+// The time and space complexity of Kruskal's algorithm using the union-find data structure can be analyzed as follows:
+
+// Time Complexity:
+
+//     The time complexity of Kruskal's algorithm using union-find is O(E log E), where E is the number of edges in the graph.
+//     The algorithm starts by sorting the edges in ascending order of their weights, which takes O(E log E) time using efficient sorting algorithms such as quicksort or mergesort.
+//     Then, for each edge, the algorithm performs a union operation using the union-find data structure and checks if the two vertices belong to different sets. This operation takes nearly constant time with the union-find data structure.
+//     Overall, the algorithm performs O(E) union and find operations, and since the union-find operations have amortized constant time complexity, the dominant factor is the time required for sorting the edges.
+//     Therefore, the overall time complexity is O(E log E).
+
+// Space Complexity:
+
+//     The space complexity of Kruskal's algorithm using union-find is O(V + E), where V is the number of vertices and E is the number of edges.
+//     The union-find data structure requires space proportional to the number of vertices, which is O(V).
+//     Additionally, the algorithm may require space to store the sorted edges and other auxiliary data structures.
+//     Therefore, the overall space complexity is O(V + E).
+
+// It's worth noting that in the case of a dense graph where E is close to V^2, the sorting step may dominate the overall time complexity. In contrast, for a sparse graph where E is much smaller than V^2, the time complexity of sorting becomes less significant.
+
+// In summary, the time complexity of Kruskal's algorithm using union-find is O(E log E), and the space complexity is O(V + E).
