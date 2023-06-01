@@ -35,7 +35,7 @@ public:
 		return parent[node];
 	}
 
-	void unionBySize(int u,int v){
+	void unionMerge(int u,int v){
 		int ulp_u=findParent(u);
 		int ulp_v=findParent(v);
 

@@ -154,3 +154,59 @@ public:
         return node;
     }
 };
+
+
+// *********************************using dijkstras*************************
+class Solution {
+public:
+    int findTheCity(int n, vector<vector<int>>& edges, int threshold) {
+        vector<pair<int, int>> adj[n];
+        for(auto edge : edges){
+            int u = edge[0];
+            int v = edge[1];
+            int w = edge[2];
+
+            adj[u].push_back({v, w});
+            adj[v].push_back({u, w});
+        }
+        
+        vector<int> shortDist(n, 0);
+        for(int i = 0; i < n; i++){
+            vector<int> dist(n, INT_MAX);
+            priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
+            pq.push({0, i});
+            dist[i] = 0;
+
+            while(!pq.empty()){
+                int u = pq.top().second;
+                int w = pq.top().first;
+                pq.pop();
+
+                for(auto [v, weight] : adj[u]){
+                    if(w + weight < dist[v]){
+                        dist[v] = w + weight;
+                        pq.push({dist[v], v});
+                    }
+                }
+            }
+            
+            int temp = 0;
+            for(int i = 0; i < n; i++){
+                if(dist[i] <= threshold && dist[i] != 0){
+                    temp++;
+                }
+            }
+            shortDist[i] = temp;
+        }
+        
+        int ans = shortDist[0], node = 0;
+        for(int i = 1; i < n; i++){
+            if(shortDist[i] <= ans){
+                ans = shortDist[i];
+                node = i;
+            }
+        }
+
+        return node;
+    }
+};

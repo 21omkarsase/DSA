@@ -113,50 +113,92 @@ public:
 // In summary, the time complexity of the code is O(n * m), and the space complexity is also O(n * m).
 
 // ***********************************using union find********************************
-class Solution {
-    void dfs(int row, int col, int n , int m , vector<vector<int>> &grid){
-        grid[row][col] = 1;                        
-
-        for(int i = -1; i <= 1; i++){
-            for(int j = -1; j <= 1; j++){
-                if(abs(i) != abs(j)){
-                    int nrow = row + i, ncol = col + j;
-                    if(nrow >= 0 && ncol >= 0 && nrow < n && ncol < m && grid[nrow][ncol] == 0){
-                        dfs(nrow, ncol, n, m, grid);
-                    }
-                }
-            }
+class Disjoint{
+    vector<int>size, parent;
+public:
+    Disjoint(int n){
+        size.resize(n+1,1);
+        parent.resize(n+1);
+        for(int i=0;i<=n;i++){
+            parent[i]=i;
         }
     }
 
+    int findParent(int node){
+        if(parent[node]==node)return node;
+
+        parent[node] = findParent(parent[node]);
+        return parent[node];
+    }
+
+    void unionMerge(int u,int v){
+        int ulp_u=findParent(u);
+        int ulp_v=findParent(v);
+
+        if(ulp_u == ulp_v)return ;
+        
+        if(size[ulp_u]>size[ulp_v]){
+            parent[ulp_v]=ulp_u; 
+            size[ulp_u]+=size[ulp_v];
+        }else{
+            parent[ulp_u]=ulp_v; 
+            size[ulp_v]+=size[ulp_u];
+        }
+    }
+};
+
+class Solution {
 public:
     int closedIsland(vector<vector<int>>& grid) {
         int n = grid.size(), m = grid[0].size();
+
+        Disjoint *ds = new Disjoint((m * n) + 1);
         
         for(int i = 0; i < n; i++){
             for(int j = 0; j < m; j++){
+                if(grid[i][j])
+                    continue;
                 if(i == 0 || j == 0 || i == n - 1 || j == m -1){
-                    if(grid[i][j] == 0){
-                        grid[i][j] = 1;
-                        dfs(i, j, n, m, grid);
+                    ds->unionMerge(m * n, (m * i) + j);
+                }else{
+                    for(int row = -1; row <= 1; row++){
+                        for(int col = -1; col <= 1; col++){
+                            if(abs(row) != abs(col)){
+                                int nrow = row + i, ncol = col + j;
+                                if(nrow >= 0 && ncol >= 0 && nrow < n && ncol < m && !grid[nrow][ncol]){
+                                    ds->unionMerge((m * i) + j, (m * nrow) + ncol);
+                                }
+                            }
+                        }
                     }
                 }
             }
         }
         
-        int cnt = 0;
+        int boundaryPar = ds->findParent(m * n);
+        unordered_set<int> cloIslands;
         for(int i = 0; i < n; i++){
             for(int j = 0; j < m; j++){
-                if(grid[i][j] == 0){
-                    cnt++;
-                    dfs(i, j, n, m, grid);
-                }
+                int currParent = ds->findParent((m * i) + j);
+                if(grid[i][j] == 0 && currParent != boundaryPar)
+                    cloIslands.insert(currParent);
             }
         }
 
-        return cnt;
+        return cloIslands.size();
     }
 };
+
+
+
+
+
+
+
+
+
+
+
 
 
 
