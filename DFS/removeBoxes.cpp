@@ -51,6 +51,11 @@
 // 47.6%
 
 
+// The time complexity of the code is O(n^4), where n is the length of the input vector boxes. This is because the code uses dynamic programming with three nested loops: one loop to iterate over the streak, one loop to iterate over the left index l, and another loop to iterate over the right index r. Each loop can potentially iterate up to n times, resulting in a total time complexity of O(n^4).
+
+// The space complexity of the code is O(n^3). This is because the code uses a 3D vector dp of size n x n x n to store the computed results. The space required is proportional to the number of possible subproblems, which is n x n x n. Therefore, the space complexity is O(n^3).
+
+
 class Solution {
     int totalPoints(int streak, int l, int r, vector<int>& boxes, vector<vector<vector<int>>> &dp){
         if(l > r)

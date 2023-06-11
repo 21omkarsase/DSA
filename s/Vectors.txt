@@ -1,5 +1,0 @@
-(1) Remove all duplicates from vector
-    vec.erase(unique(vec.begin(), vec.end()), vec.end());
-    
-(2) Sum of all elements of vector
-    accumulate(v.begin(),v.end(),intial_sum)  //intial_sum = 0 

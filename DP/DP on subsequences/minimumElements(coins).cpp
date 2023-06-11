@@ -4,26 +4,26 @@ using namespace std;
 int minimumElementsSpaceOptimization(vector<int> &nums, int x)
 {
     int n = nums.size();
-    vector<int> prev(x+1, 0), curr(x + 1, 0);
+    vector<int> dp1(x+1, 0), dp2(x + 1, 0);
 
     for(int i = 0; i <= x; i++) 
-       if(i % nums[0] == 0) prev[i] = i / nums[0];
-       else prev[i] = 1e9;
+       if(i % nums[0] == 0) dp1[i] = i / nums[0];
+       else dp1[i] = 1e9;
 
     for(int i = 1; i < n; i++){
         for(int j = 0; j <= x; j++){
-            int notTake = prev[j];
+            int notTake = dp1[j];
             int take = INT_MAX;
-            if(nums[i] <= j) take = curr[j - nums[i]] + 1;
+            if(nums[i] <= j) take = dp2[j - nums[i]] + 1;
 
-            curr[j] = min(take, notTake);
+            dp2[j] = min(take, notTake);
         }
-        prev = curr;
+        dp1 = dp2;
     }
 
-    int ans =  prev[x];
+    int ans =  dp1[x];
     if(ans >= 1e9) return -1;
-    else return prev[x];
+    else return dp1[x];
 }
 
 int minimumElementsTabulation(vector<int> &nums, int x)
