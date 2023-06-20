@@ -40,6 +40,22 @@ int printLIS(vector<int>& nums) {
     return ans;
 }
 
+// class Solution {
+// public:
+//     int lengthOfLIS(vector<int>& nums) {
+//         int n = nums.size();
+
+//         vector<int> dp(n, INT_MAX);
+//         dp[0] = nums[0];
+//         for(int idx = 1; idx < n; idx++){
+//             auto lb = lower_bound(dp.begin(), dp.begin() + idx, nums[idx]) - dp.begin();
+//             dp[lb] = nums[idx];
+//         }
+
+//         return find(dp.begin(), dp.end(), INT_MAX) - dp.begin();
+//     }
+// };
+
 int lengthOfLISBinarySearch(vector<int>& nums) {
     int n = nums.size();
     vector<int> dp;

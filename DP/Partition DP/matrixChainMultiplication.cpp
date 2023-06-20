@@ -16,6 +16,57 @@
 #include <bits/stdc++.h> 
 using namespace std;
 
+class Solution{
+public:
+    int matrixMultiplication(int n, int nums[])
+    {
+        vector<vector<int>> dp(n, vector<int>(n, 0));
+
+        for(int start = n - 3; start >= 0 ; start--){
+            for(int end = start + 1; end < n - 1; end++){
+                int maxCalculations = INT_MAX;
+                for(int it = start; it < end; it++){
+                    maxCalculations = min(maxCalculations, 
+                                          nums[start] * nums[it + 1] * nums[end + 1] + 
+                                          dp[start][it] + dp[it + 1][end]);
+                }
+                
+                dp[start][end] = maxCalculations;
+            }
+        }
+        
+        return dp[0][n - 2];
+    }
+};
+
+class Solution{
+    int mcm(int start, int end, int nums[], vector<vector<int>> &dp){
+        if(start == end)
+            return 0;
+        
+        if(dp[start][end] != -1)
+            return dp[start][end];
+        
+        int maxCalculations = INT_MAX;
+        for(int it = start; it < end; it++){
+            maxCalculations = min(maxCalculations, 
+                                  nums[start] * nums[it + 1] * nums[end + 1] + 
+                                  mcm(start, it, nums, dp)+ mcm(it + 1, end, nums, dp)
+                            );
+        }
+        
+        return dp[start][end] = maxCalculations;
+    }
+public:
+    int matrixMultiplication(int n, int nums[])
+    {
+        vector<vector<int>> dp(n, vector<int>(n, -1));
+        return mcm(0, n - 2, nums, dp);
+    }
+};
+
+
+
 int matrixMultiplicationTabulation(vector<int>& nums, int n){
     int ans = INT_MAX;
     vector<vector<int>> dp(n, vector<int>(n, 0));

@@ -2,6 +2,29 @@
 using namespace std;
 
 
+class Solution {
+public:
+    int numDistinct(string s, string t) {
+        int n = s.size(), m = t.size();
+        vector<int> dp(m + 1, 0);
+
+        dp[0] = 1;
+        
+        for(int slen = 1; slen <= n; slen++){
+            for(int tlen = m; tlen > 0; tlen--){
+                long long result = 0;
+                if(s[slen - 1] == t[tlen - 1]){
+                    result = dp[tlen - 1];
+                }
+
+                dp[tlen] = result + dp[tlen];
+            }
+        }
+
+        return dp[m];
+    }
+};
+
 
 int numDistinctTabulation(string s, string t) {
     int n = s.size(), m = t.size(), mod = 1e9 + 7;

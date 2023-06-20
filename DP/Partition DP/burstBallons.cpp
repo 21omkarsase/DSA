@@ -43,6 +43,70 @@
 #include<bits/stdc++.h>
 using namespace std;
 
+class Solution {
+public:
+    int maxCoins(vector<int>& nums) {
+        nums.insert(nums.begin(), 1);
+        nums.push_back(1);
+
+        int n = nums.size();
+        
+        vector<vector<int>> dp(n, vector<int>(n, 0));
+
+        for(int start = n - 2; start >= 0; start--){
+            for(int end = start + 2; end < n; end++){
+                int maxCoins = 0;
+
+                for(int idx = start + 1; idx < end; idx++){
+                    int currCoins = nums[start] * nums[end] * nums[idx];
+                    int leftPartCoins = dp[start][idx];
+                    int rightPartCoins = dp[idx][end];
+
+                    maxCoins = max(maxCoins, currCoins + leftPartCoins + rightPartCoins);
+                }
+
+                dp[start][end] = maxCoins;
+            }
+        }
+        
+        return dp[0][n - 1];
+    }
+};
+
+
+class Solution {
+    int calculateMaxCoins(int start, int end, vector<int> &nums, vector<vector<int>> &dp){
+        if(dp[start][end] != -1)
+            return dp[start][end];
+
+        int maxCoins = 0;
+
+        for(int idx = start + 1; idx < end; idx++){
+            int currCoins = nums[start] * nums[end] * nums[idx];
+            int leftPartCoins = calculateMaxCoins(start, idx, nums, dp);
+            int rightPartCoins = calculateMaxCoins(idx, end, nums, dp);
+
+            maxCoins = max(maxCoins, currCoins + leftPartCoins + rightPartCoins);
+        }
+
+        return dp[start][end] = maxCoins;
+    }
+public:
+    int maxCoins(vector<int>& nums) {
+        nums.insert(nums.begin(), 1);
+        nums.push_back(1);
+
+        int n = nums.size();
+        
+        vector<vector<int>> dp(n, vector<int>(n, -1));
+        return calculateMaxCoins(0, n - 1, nums, dp);
+    }
+};
+
+
+
+
+
 int maxCoinsTabulation(vector<int>& nums) {
     int n = nums.size();
     int ans = INT_MAX;

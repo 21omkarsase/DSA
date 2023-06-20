@@ -1,6 +1,39 @@
 #include<bits/stdc++.h>
 using namespace std;
 
+class Solution {
+public:
+    vector<int> largestDivisibleSubset(vector<int>& nums) {
+        int n = nums.size();
+        sort(nums.begin(), nums.end());
+
+        vector<int> dp(n, 1);
+
+        for(int i = 1; i < n; i++){
+            for(int j = 0; j < i; j++){
+                if(nums[i] % nums[j] == 0)
+                    dp[i] = max(dp[i], dp[j] + 1);
+            }
+        }
+        
+        vector<int> divSubset;
+        
+        auto idx = max_element(dp.begin(), dp.end()) - dp.begin();
+        divSubset.push_back(nums[idx]);
+        
+        for(int i = idx - 1; i >= 0; i--){
+            if(nums[idx] % nums[i] == 0 && dp[idx] == dp[i] + 1){
+                divSubset.push_back(nums[i]);
+                idx = i;
+            }
+        }
+
+        return divSubset;
+        
+    }
+};
+
+
 vector<int> largestDivisibleSubset(vector<int>& nums) {
     sort(nums.begin(), nums.end());
     int n = nums.size();
