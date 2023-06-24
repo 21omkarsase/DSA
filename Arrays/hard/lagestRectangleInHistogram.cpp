@@ -1,110 +1,113 @@
-#include<bits/stdc++.h>
-using namespace std;
+// 84. Largest Rectangle in Histogram
+// Hard
+// 14.6K
+// 207
+// Companies
 
-int largestRectangleArea3(vector<int>& heights) {
-   int n = heights.size(), ans = 0;
-   stack<int> st;
+// Given an array of integers heights representing the histogram's bar height where the width of each bar is 1, return the area of the largest rectangle in the histogram.
 
-   for(int i = 0; i <= n; i++){
-       while(!st.empty() && (i == n || heights[i] <= heights[st.top()])){
-           int ht = heights[st.top()];
-           st.pop();
-           
-           int w;
-           if(st.empty()) w = i;
-           else w = abs(st.top() - i) - 1;
+ 
 
-           ans = max(ans, w * ht);
-       }
-       st.push(i);
-   }
+// Example 1:
 
-   return ans;
-}
+// Input: heights = [2,1,5,6,2,3]
+// Output: 10
+// Explanation: The above is a histogram where width of each bar is 1.
+// The largest rectangle is shown in the red area, which has an area = 10 units.
+
+// Example 2:
+
+// Input: heights = [2,4]
+// Output: 4
+
+ 
+
+// Constraints:
+
+//     1 <= heights.length <= 105
+//     0 <= heights[i] <= 104
+
+// Accepted
+// 685.4K
+// Submissions
+// 1.6M
+// Acceptance Rate
+// 42.9%
 
 
-int largestRectangleArea2(vector<int>& heights) {
-   int n = heights.size();
-   stack<int> st;
-   vector<int> leftSmall(n, 0), rightSmall(n, 0);
 
-   for(int i = 0; i < n; i++){
-       while(!st.empty() && heights[st.top()] >= heights[i]){
-           st.pop();
-       }
+// Time Complexity : O(N) + O(N)
+// Space Complexity : O(N)
 
-       if(st.empty()) leftSmall[i] = 0;
-       else leftSmall[i] = st.top() + 1;
 
-       st.push(i);
-   }
+class Solution {
+public:
+    int largestRectangleArea(vector<int>& heights) {
+        int n = heights.size();
+        
+        int maxArea = 0;
+        stack<int> st;
 
-   while(!st.empty()) st.pop();
+        for (int idx = 0; idx <= n; idx++) {
+            while (!st.empty() && (idx == n || heights[st.top()] > heights[idx])) {
+                int topHeight = heights[st.top()];
+                st.pop();
+                
+                int leftIdx = st.empty() ? -1 : st.top();
+                int area = topHeight * (idx - leftIdx - 1);
+                maxArea = max (maxArea, area);
+            }
 
-   for(int i = n - 1; i >= 0; i--){
-       while(!st.empty() && heights[st.top()] >= heights[i]){
-           st.pop();
-       }
+            st.push(idx);
+        }
 
-       if(st.empty()) rightSmall[i] = n - 1;
-       else rightSmall[i] = st.top() - 1;
-
-       st.push(i);
-   }
-
-   int ans = 0;
-   for(int i = 0; i < n; i++){
-       ans = max(ans, heights[i] * (rightSmall[i] - leftSmall[i] + 1));
-   }
-
-   return ans;
-}
-
-int lraHelper(vector<int> heights, int h, int i, string side, int n){
-    if(i == -1 || i == n) return 0;
-   
-    if(heights[i] < h) return 0;
-
-    if(side == "both"){
-        int right = 0, left = 0;
-        if(heights[i] >= h) right = lraHelper(heights, h, i + 1, "right", n);
-        if(heights[i] >= h) left = lraHelper(heights, h, i - 1, "left", n);
-        return left + right + 1;
+        return maxArea;
     }
-    
-    int ans = 0;
-    if(side == "left"){
-        if(heights[i] >= h) ans = lraHelper(heights, h, i - 1, side, n) + 1;
-    }else {
-        if(heights[i] >= h) ans = lraHelper(heights, h , i + 1, side, n) + 1; 
+};
+
+
+// Time Complexity : 2(O(N) + O(N))
+// Space Complexity : O(N)
+
+class Solution {
+public:
+    int largestRectangleArea(vector<int>& heights) {
+        int n = heights.size();
+
+        vector<int> lsArray(n, 0), rsArray(n, 0);
+        stack<int> st;
+
+        // O(N) for stack (Each element will be pushed onto the stack exactly once.)
+
+        for (int idx = 0; idx < n; idx++) {                                 // O(N)
+            while (!st.empty() && heights[st.top()] >= heights[idx])         
+                st.pop();
+            
+            lsArray[idx] = st.empty() ? -1 : st.top();
+
+            st.push(idx);
+        }
+
+        while (!st.empty())
+            st.pop();
+
+        int maxArea = 0;
+        for (int idx = n - 1; idx >= 0; idx--) {
+            while (!st.empty() && heights[st.top()] >= heights[idx])
+                st.pop();
+            
+            rsArray[idx] = st.empty() ? n : st.top();
+            int area = (rsArray[idx] - lsArray[idx] - 1) * heights[idx];
+            maxArea = max(maxArea, area);
+
+            st.push(idx);
+        }
+
+        return maxArea;
     }
+};
 
-    return ans;
-}
 
-int largestRectangleArea1(vector<int>& heights) {
-   int ans = INT_MIN;
-   int n = heights.size();
-   for(int i = 0; i < n; i++){
-       int area = heights[i] * (lraHelper(heights, heights[i], i, "both", n));
-       ans = max(ans, area);
-   } 
 
-   return ans;
-}
 
-int main(){
-    int n;
-    cin >> n;
 
-    vector<int> heights(n, 0);
-    for(auto &e : heights) cin >> e;
-
-    cout<<largestRectangleArea1<<"\n";
-
-    cout<<largestRectangleArea2<<"\n";
-
-    cout<<largestRectangleArea3<<"\n";
-
-    return 0;
-}

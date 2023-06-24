@@ -1,38 +1,76 @@
-#include<bits/stdc++.h>
-using namespace std;
+// 1277. Count Square Submatrices with All Ones
+// Medium
+// 4.4K
+// 71
+// Companies
 
-int countSquares(vector<vector<int>>& matrix) {
-    int n = matrix.size(), m = matrix[0].size();
-    vector<vector<int>> dp = matrix;
+// Given a m * n matrix of ones and zeros, return how many square submatrices have all ones.
 
-    for(int i = 1; i < n; i++){
-        for(int j = 1; j < m; j++){
-            if(matrix[i][j] && matrix[i - 1][j] && matrix[i][j - 1] && matrix[i - 1][j - 1]){
-                dp[i][j] += min(dp[i][j - 1], min(dp[i - 1][j], dp[i - 1][j - 1]));
-            }
-        }
+ 
+
+// Example 1:
+
+// Input: matrix =
+// [
+//   [0,1,1,1],
+//   [1,1,1,1],
+//   [0,1,1,1]
+// ]
+// Output: 15
+// Explanation: 
+// There are 10 squares of side 1.
+// There are 4 squares of side 2.
+// There is  1 square of side 3.
+// Total number of squares = 10 + 4 + 1 = 15.
+
+// Example 2:
+
+// Input: matrix = 
+// [
+//   [1,0,1],
+//   [1,1,0],
+//   [1,1,0]
+// ]
+// Output: 7
+// Explanation: 
+// There are 6 squares of side 1.  
+// There is 1 square of side 2. 
+// Total number of squares = 6 + 1 = 7.
+
+ 
+
+// Constraints:
+
+//     1 <= arr.length <= 300
+//     1 <= arr[0].length <= 300
+//     0 <= arr[i][j] <= 1
+
+// Accepted
+// 197.1K
+// Submissions
+// 264.2K
+// Acceptance Rate
+// 74.6%
+
+// Time Complexity  : O(N^2)
+// Space Complexity  : O(N^2)
+
+class Solution {
+public:
+    int countSquares(vector<vector<int>>& matrix) {
+        int n = matrix.size(), m = matrix[0].size();
+
+        int totalSubMatrices = 0;
+        vector<vector<int>> dp = matrix;
+
+        for (int row = 1; row < n; row++) 
+            for (int col = 1; col < m; col++) 
+                if (matrix[row][col])
+                    dp[row][col] = min(dp[row - 1][col], min(dp[row][col - 1], dp[row - 1][col - 1])) + 1;
+        
+        for (int row = 0; row < n; row++)
+            totalSubMatrices += (accumulate(dp[row].begin(), dp[row].end(), 0));
+
+        return totalSubMatrices;
     }
-
-   int squares = 0;
-   for(auto v : dp)
-       for(auto e : v)
-            squares += e;
-    
-    return squares;
-}
-
-
-int main(){
-    int n, m;
-    cin >> n >> m;
-
-    vector<vector<int>> matrix(n, vector<int>(m, 0));
-    for(int i = 0; i < n; i++){
-        for(int j = 0; j < m; j++)
-            cin >> matrix[i][j];
-    }
-
-    cout<<countSquares(matrix)<<"\n";
-    
-    return 0;
-}
+};
