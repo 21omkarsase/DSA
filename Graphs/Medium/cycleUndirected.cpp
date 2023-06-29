@@ -3,6 +3,46 @@
 using namespace std;
 
 // } Driver Code Ends
+
+class Solution {
+    bool bfs(int node, vector<int> &visited, vector<int> adj[]) {
+        queue<pair<int, int>> bfsQue;
+        bfsQue.push({node, -1});
+        
+        while (!bfsQue.empty()) {
+            int size = bfsQue.size();
+            
+            while (size--) {
+                int node = bfsQue.front().first;
+                int parent = bfsQue.front().second;
+                
+                bfsQue.pop();
+                
+                visited[node] = 1;
+                
+                for (auto adjNode : adj[node]) {
+                    if (!visited[adjNode]) {
+                        bfsQue.push({adjNode, node});
+                    } else if(adjNode != parent) {
+                        return true;
+                    }
+                }
+            }
+        }
+    }
+  public:
+    bool isCycle(int n, vector<int> adj[]) {
+        vector<int> visited(n, 0);
+        
+        for (int node = 0; node < n; node++) {
+            if (!visited[node] && bfs(node, visited, adj))
+                return true;
+        }
+        
+        return false;
+    }
+};
+
 class Solution {
   public:
     

@@ -97,6 +97,28 @@ using namespace std;
 // } Driver Code Ends
 /*You are required to complete this function*/
 
+class Solution{
+    public:
+    int maxLen(vector<int>&A, int n)
+    {
+        int sum = 0, subarrayLen = 0;
+        unordered_map<int, int> tracker;
+        
+        tracker[0] = -1;
+        
+        for (int idx = 0; idx < n; idx++) {
+            sum += A[idx];
+            
+            if (tracker.find(sum) != tracker.end())
+                subarrayLen = max(subarrayLen, idx - tracker[sum]);
+            else
+                tracker[sum] = idx;
+        }
+        
+        return subarrayLen;
+    }
+};
+
 class Solution
 {
 public:

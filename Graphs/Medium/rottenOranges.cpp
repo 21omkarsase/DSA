@@ -1,112 +1,125 @@
-// Rotten Oranges
-// MediumAccuracy: 46.02%Submissions: 84K+Points: 4
-// Lamp
-// Stand out from the crowd. Prepare with Complete Interview Preparation  
+// 994. Rotting Oranges
+// Medium
+// 10.8K
+// 348
+// Companies
 
-// Given a grid of dimension nxm where each cell in the grid can have values 0, 1 or 2 which has the following meaning:
-// 0 : Empty cell
-// 1 : Cells have fresh oranges
-// 2 : Cells have rotten oranges
+// You are given an m x n grid where each cell can have one of three values:
 
-// We have to determine what is the minimum time required to rot all oranges. A rotten orange at index [i,j] can rot other fresh orange at indexes [i-1,j], [i+1,j], [i,j-1], [i,j+1] (up, down, left and right) in unit time. 
-//  
+//     0 representing an empty cell,
+//     1 representing a fresh orange, or
+//     2 representing a rotten orange.
+
+// Every minute, any fresh orange that is 4-directionally adjacent to a rotten orange becomes rotten.
+
+// Return the minimum number of minutes that must elapse until no cell has a fresh orange. If this is impossible, return -1.
+
+ 
 
 // Example 1:
 
-// Input: grid = {{0,1,2},{0,1,2},{2,1,1}}
-// Output: 1
-// Explanation: The grid is-
-// 0 1 2
-// 0 1 2
-// 2 1 1
-// Oranges at positions (0,2), (1,2), (2,0)
-// will rot oranges at (0,1), (1,1), (2,2) and 
-// (2,1) in unit time.
+// Input: grid = [[2,1,1],[1,1,0],[0,1,1]]
+// Output: 4
 
 // Example 2:
 
-// Input: grid = {{2,2,0,1}}
+// Input: grid = [[2,1,1],[0,1,1],[1,0,1]]
 // Output: -1
-// Explanation: The grid is-
-// 2 2 0 1
-// Oranges at (0,0) and (0,1) can't rot orange at
-// (0,3).
+// Explanation: The orange in the bottom left corner (row 2, column 0) is never rotten, because rotting only happens 4-directionally.
 
-//  
+// Example 3:
 
-// Your Task:
-// You don't need to read or print anything, Your task is to complete the function orangesRotting() which takes grid as input parameter and returns the minimum time to rot all the fresh oranges. If not possible returns -1.
-//  
+// Input: grid = [[0,2]]
+// Output: 0
+// Explanation: Since there are already no fresh oranges at minute 0, the answer is just 0.
 
-// Expected Time Complexity: O(n*m)
-// Expected Auxiliary Space: O(n*m)
-//  
+ 
 
-//{ Driver Code Starts
-#include<bits/stdc++.h>
-using namespace std;
+// Constraints:
 
-// } Driver Code Ends
+//     m == grid.length
+//     n == grid[i].length
+//     1 <= m, n <= 10
+//     grid[i][j] is 0, 1, or 2.
 
-vector<pair<int,int>>loop={{-1,0},{1,0},{0,1},{0,-1}};
-class Solution 
-{
-    public:
+// Accepted
+// 622.2K
+// Submissions
+// 1.2M
+// Acceptance Rate
+// 53.2%
+
+// Time Complexity : O(N * M)
+// Space Complexity : O(N * M) 
+
+class Solution {
+public:
     int orangesRotting(vector<vector<int>>& grid) {
-        int n=grid.size(),m=grid[0].size();
-        int vis[n][m];
-        queue<pair<pair<int,int>,int>>q;
-
-        for(int i=0;i<n;i++){
-            for(int j=0;j<m;j++){
-                if(grid[i][j]==2){
-                    q.push({{i,j},0});
-                    vis[i][j]=2;
-                }else vis[i][j]=0;
+        int n = grid.size(), m = grid[0].size();
+        
+        queue<pair<int, pair<int, int>>> rottenQueue;
+        vector<vector<int>> visited(n, vector<int>(m, 0));
+        
+        for (int row = 0; row < n; row++) {
+            for (int col = 0; col < m; col++) {
+                if (grid[row][col] == 2) {
+                    rottenQueue.push({0, {row, col}});
+                    visited[row][col] = 1;
+                }
+                
+                if (grid[row][col] == 0)
+                    visited[row][col] = 1;
             }
         }
-        int cnt=0;
-        while(!q.empty()){
-            int row=q.front().first.first;
-            int col=q.front().first.second;
-            int temp =q.front().second;
-            q.pop();
-            cnt=max(cnt,temp);
-            for(auto p:loop){
-                int nrow=row+p.first;
-                int ncol=col+p.second;
-                if(nrow>=0 && ncol>=0 && nrow<n && ncol<m && grid[nrow][ncol]==1 && vis[nrow][ncol]!=2){
-                    q.push({{nrow,ncol},temp+1});
-                    vis[nrow][ncol]=2;
+
+        int time = 0;
+
+        while (!rottenQueue.empty()) {
+            int qSize = rottenQueue.size();
+
+            while (qSize--) {
+
+                int row = rottenQueue.front().second.first;
+                int col = rottenQueue.front().second.second;
+                int t = rottenQueue.front().first;
+                
+                time = max(time, t);
+
+                rottenQueue.pop();
+
+                for (int idx1 = -1; idx1 < 2; idx1++) {
+                    for (int idx2 = -1; idx2 < 2; idx2++) {
+                        if (abs(idx1) != abs(idx2)) {
+                            int nRow = row + idx1, nCol = col + idx2;
+
+                            if (nRow >= 0 && nCol >= 0 && nRow < n && nCol < m && grid[nRow][nCol] == 1 && visited[nRow][nCol] == 0) {
+                                visited[nRow][nCol] = 1;
+                                rottenQueue.push({t + 1, {nRow, nCol}});
+                            }
+                        }
+                    }
                 }
             }
         }
-        for(int i=0;i<n;i++){
-            for(int j=0;j<m;j++){
-                if(vis[i][j]!=2 && grid[i][j]==1)return -1;
+
+        for (int row = 0; row < n; row++) {
+            for (int col = 0; col < m; col++) {
+                if (grid[row][col] == 1 && visited[row][col] == 0) 
+                    return -1;
             }
         }
-        return cnt;
+
+        return time;
     }
 };
 
-//{ Driver Code Starts.
-int main(){
-	int tc;
-	cin >> tc;
-	while(tc--){
-		int n, m;
-		cin >> n >> m;
-		vector<vector<int>>grid(n, vector<int>(m, -1));
-		for(int i = 0; i < n; i++){
-			for(int j = 0; j < m; j++){
-				cin >> grid[i][j];
-			}
-		}
-		Solution obj;
-		int ans = obj.orangesRotting(grid);
-		cout << ans << "\n";
-	}
-	return 0;
-}
-// } Driver Code Ends
+
+
+
+
+
+
+
+
+
+
