@@ -88,3 +88,37 @@ public:
         return start;
     }
 };
+
+// only using prefix sum
+
+// Time Complexity : O(N)
+// Space Complexity : O(1)
+
+class Solution {
+public:
+    int minimizeArrayValue(vector<int>& nums) {
+        int n = nums.size();
+
+        long long sum = nums[0];
+        int minMax = nums[0];
+
+        // we can't minmize first element
+
+        for (int idx = 1; idx < n; idx++) {
+            sum += nums[idx];
+
+            // if avg of nums till idx is greater than sum 
+            // then we will need to update our ans
+            
+            if (sum % (idx + 1) != 0) {
+                sum / (idx + 1) + 1 > minMax ? minMax = sum / (idx + 1) + 1 : minMax;
+            }
+            else {
+                sum / (idx + 1) > minMax ? minMax = sum / (idx + 1) : minMax;
+            }
+                
+        }
+
+        return minMax;
+    }
+};
