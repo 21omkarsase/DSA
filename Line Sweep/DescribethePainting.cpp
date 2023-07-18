@@ -87,7 +87,9 @@ public:
         long long prevSum = 0;
         
         for (auto it = tracker.begin(); it != tracker.end(); it++) {
-            if (prevSum > 0) {
+            if (prevSum > 0) {                  
+                // every time segments will intersect (we can easily divide them) 
+                // except when sum == 0
                 painting.push_back({prevNum, it->first, prevSum});
             }
             

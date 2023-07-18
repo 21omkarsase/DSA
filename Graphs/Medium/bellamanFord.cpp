@@ -1,153 +1,90 @@
-// Distance from the Source (Bellman-Ford Algorithm)
-// MediumAccuracy: 48.11%Submissions: 29K+Points: 4
-// Lamp
-// Stand out from the crowd. Prepare with Complete Interview Preparation  
+// 743. Network Delay Time
+// Medium
+// 6.6K
+// 336
+// Companies
 
-// Given a weighted, directed and connected graph of V vertices and E edges, Find the shortest distance of all the vertex's from the source vertex S.
-// Note: If the Graph contains a negative cycle then return an array consisting of only -1.
+// You are given a network of n nodes, labeled from 1 to n. You are also given times, a list of travel times as directed edges times[i] = (ui, vi, wi), where ui is the source node, vi is the target node, and wi is the time it takes for a signal to travel from source to target.
+
+// We will send a signal from a given node k. Return the minimum time it takes for all the n nodes to receive the signal. If it is impossible for all the n nodes to receive the signal, return -1.
+
+ 
 
 // Example 1:
 
-// Input:
-
-// E = [[0,1,9]]
-// S = 0
-// Output:
-// 0 9
-// Explanation:
-// Shortest distance of all nodes from
-// source is printed.
+// Input: times = [[2,1,1],[2,3,1],[3,4,1]], n = 4, k = 2
+// Output: 2
 
 // Example 2:
 
-// Input:
+// Input: times = [[1,2,1]], n = 2, k = 1
+// Output: 1
 
-// E = [[0,1,5],[1,0,3],[1,2,-1],[2,0,1]]
-// S = 2
-// Output:
-// 1 6 0
-// Explanation:
-// For nodes 2 to 0, we can follow the path-
-// 2-0. This has a distance of 1.
-// For nodes 2 to 1, we cam follow the path-
-// 2-0-1, which has a distance of 1+5 = 6,
+// Example 3:
 
-//  
+// Input: times = [[1,2,1]], n = 2, k = 2
+// Output: -1
 
-// Your Task:
-// You don't need to read input or print anything. Your task is to complete the function bellman_ford( ) which takes a number of vertices V and an E-sized list of lists of three integers where the three integers are u,v, and w; denoting there's an edge from u to v, which has a weight of w and source node S as input parameters and returns a list of integers where the ith integer denotes the distance of an ith node from the source node.
-
-// If some node isn't possible to visit, then its distance should be 100000000(1e8). Also, If the Graph contains a negative cycle then return an array consisting of only -1.
-
-//  
-
-// Expected Time Complexity: O(V*E).
-// Expected Auxiliary Space: O(V).
-
-//  
+ 
 
 // Constraints:
-// 1 ≤ V ≤ 500
-// 1 ≤ E ≤ V*(V-1)
-// -1000 ≤ adj[i][j] ≤ 1000
-// 0 ≤ S < V
 
+//     1 <= k <= n <= 100
+//     1 <= times.length <= 6000
+//     times[i].length == 3
+//     1 <= ui, vi <= n
+//     ui != vi
+//     0 <= wi <= 100
+//     All the pairs (ui, vi) are unique. (i.e., no multiple edges.)
 
-//{ Driver Code Starts
-#include <bits/stdc++.h>
-using namespace std;
-
-// } Driver Code Ends
-// User function Template for C++
+// Accepted
+// 394.2K
+// Submissions
+// 753.2K
+// Acceptance Rate
+// 52.3%
 
 class Solution {
-  public:
-    /*  Function to implement Bellman Ford
-    *   edges: vector of vectors which represents the graph
-    *   S: source vertex to start traversing graph with
-    *   V: number of vertices
-    */
+public:
+    int networkDelayTime(vector<vector<int>>& times, int n, int k) {
+        vector<int> dist(n + 1, 1e9);
+        dist[k] = 0;
+        
 
-    //implementation only work for directed graph 
-    //so convert undirected graph to directed first
-    vector<int> bellman_ford(int V, vector<vector<int>>& edges, int S) {
-        vector<int>dist(V,1e8);
-        dist[S]=0;
+        // relaxing every edge
+        // by iterating v - 1 times
+        // beacause graph can have at most v - 1 edges
+        for (int idx = 1; idx < n; idx++) {
+            for (auto it : times) {
+                int u = it[0], v = it[1], w = it[2];
 
-        // relax all nodes for n - 1 times (n --> no. of nodes)
-        // relaxation : 
-        // e.g (u : 1 -> v : 3  (w : 5))
-        // checking condition : 
-        // if(dist[u] + w < dis[v])
-                // dist[v] = dist[u] + w
-
-        //why n - 1 :
-        // in worst case we will need take n - 1 edges to travel from first node to last node
-
-        for(int i=0;i<V-1;i++){
-            for(auto it : edges){
-                int u = it[0];
-                int v = it[1];
-                int w = it[2];
-                
-                if(dist[u] != 1e8 && dist[u] + w < dist[v]){
+                if (dist[v] > dist[u] + w) {
                     dist[v] = dist[u] + w;
                 }
             }
         }
         
+        for (auto it : times) {
+            int u = it[0], v = it[1], w = it[2];
 
-
-        // this is n'th iteration to detect -ve cycle
-        for(auto it : edges){
-            int u = it[0];
-            int v = it[1];
-            int w = it[2];
-            
-            if(dist[u] != 1e8 && dist[u]+w<dist[v]){
-                //if value get's reduced here, then graph has -ve cycle in it.
-               return {-1};
+            if (dist[v] > dist[u] + w) {   // graph with -ve cycle sum 
+                return -1;
             }
         }
+
+        int totalTime = 0;
         
-        return dist;
+        for (int node = 1; node <= n; node++) {
+            if (dist[node] >= 1e9) {
+                return -1;                    // can't reach this node
+            }
+
+            totalTime = max(totalTime, dist[node]);
+        }
+
+        return totalTime;
     }
 };
-
-
-//{ Driver Code Starts.
-
-int main() {
-    int t;
-    cin >> t;
-    while (t--) {
-        int N, m;
-        cin >> N >> m;
-        vector<vector<int>> edges;
-
-        for (int i = 0; i < m; ++i) {
-            vector<int> temp;
-            for (int j = 0; j < 3; ++j) {
-                int x;
-                cin >> x;
-                temp.push_back(x);
-            }
-            edges.push_back(temp);
-        }
-
-        int src;
-        cin >> src;
-
-        Solution obj;
-        vector<int> res = obj.bellman_ford(N, edges, src);
-
-        for (auto x : res) {
-            cout << x << " ";
-        }
-        cout << "\n";
-    }
-    return 0;
-}
 
 // } Driver Code Ends
 

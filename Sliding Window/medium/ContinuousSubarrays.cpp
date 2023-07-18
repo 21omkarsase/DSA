@@ -52,6 +52,10 @@
 // Acceptance Rate
 // 33.5%
 
+
+// Time Complexity : O(N) + O(N*Log(LogN)) (for sieve)
+// Space Complexity : O(N)
+
 class Solution {
 public:
     long long continuousSubarrays(vector<int>& nums) {
@@ -92,6 +96,38 @@ public:
 
                 smallest = smallestTracker.begin()->first;
                 largest = largestTracker.begin()->first;
+            }
+
+            subarrayCount += (right - left + 1);
+        }
+
+        return subarrayCount;
+    }
+};
+
+class Solution {
+public:
+    long long continuousSubarrays(vector<int>& nums) {
+        int n = nums.size();
+
+        long long subarrayCount = 0;
+        int left = 0;
+
+        multiset<int> tracker;
+
+        for (int right = 0; right < n; right++) {
+            tracker.insert(nums[right]);
+            
+            int smallest = *tracker.begin(), largest = *tracker.rbegin();
+            
+            while (left <= right && abs(smallest - largest) > 2) {
+                auto it = tracker.find(nums[left]);
+                tracker.erase(it);
+
+                left++;
+
+                smallest = *tracker.begin();
+                largest = *tracker.rbegin();
             }
 
             subarrayCount += (right - left + 1);

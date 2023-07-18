@@ -1,117 +1,94 @@
-// Floyd Warshall
-// MediumAccuracy: 32.89%Submissions: 79K+Points: 4
-// Lamp
-// Stand out from the crowd. Prepare with Complete Interview Preparation  
+// 743. Network Delay Time
+// Medium
+// 6.6K
+// 336
+// Companies
 
-// The problem is to find the shortest distances between every pair of vertices in a given edge-weighted directed graph. The graph is represented as an adjacency matrix of size n*n. Matrix[i][j] denotes the weight of the edge from i to j. If Matrix[i][j]=-1, it means there is no edge from i to j.
-// Do it in-place.
+// You are given a network of n nodes, labeled from 1 to n. You are also given times, a list of travel times as directed edges times[i] = (ui, vi, wi), where ui is the source node, vi is the target node, and wi is the time it takes for a signal to travel from source to target.
+
+// We will send a signal from a given node k. Return the minimum time it takes for all the n nodes to receive the signal. If it is impossible for all the n nodes to receive the signal, return -1.
+
+ 
 
 // Example 1:
 
-// Input: matrix = {{0,25},{-1,0}}
-
-// Output: {{0,25},{-1,0}}
-
-// Explanation: The shortest distance between
-// every pair is already given(if it exists).
+// Input: times = [[2,1,1],[2,3,1],[3,4,1]], n = 4, k = 2
+// Output: 2
 
 // Example 2:
 
-// Input: matrix = {{0,1,43},{1,0,6},{-1,-1,0}}
+// Input: times = [[1,2,1]], n = 2, k = 1
+// Output: 1
 
-// Output: {{0,1,7},{1,0,6},{-1,-1,0}}
+// Example 3:
 
-// Explanation: We can reach 2 from 0 as 0->1->2
-// and the cost will be 1+6=7 which is less than 
-// 43.
+// Input: times = [[1,2,1]], n = 2, k = 2
+// Output: -1
 
-// Your Task:
-// You don't need to read, return or print anything. Your task is to complete the function shortest_distance() which takes the matrix as input parameter and modifies the distances for every pair in-place.
-
-// Expected Time Complexity: O(n3)
-// Expected Space Complexity: O(1)
+ 
 
 // Constraints:
-// 1 <= n <= 100
-// -1 <= matrix[ i ][ j ] <= 1000
 
+//     1 <= k <= n <= 100
+//     1 <= times.length <= 6000
+//     times[i].length == 3
+//     1 <= ui, vi <= n
+//     ui != vi
+//     0 <= wi <= 100
+//     All the pairs (ui, vi) are unique. (i.e., no multiple edges.)
 
-//{ Driver Code Starts
-//Initial template for C++
+// Accepted
+// 394.2K
 
-#include<bits/stdc++.h>
-using namespace std;
-
-// } Driver Code Ends
-//User function template for C++
 
 class Solution {
-  public:
+public:
+    int networkDelayTime(vector<vector<int>>& times, int n, int k) {
+        vector<vector<int>> dist(n + 1, vector<int>(n + 1));
 
-  //multiple source shortest path algorithm
-  //also detects -ve cycles
-  //in directed graph only(convert undirected to directed)
-	void shortest_distance(vector<vector<int>>&matrix){
-	    int n = matrix.size();
+        for (int row = 1; row <= n; row++) {
+            for (int col = 1; col <= n; col++) {
+                if (row == col) {
+                    dist[row][col] = 0;
+                } else {
+                    dist[row][col] = 1e9;
+                }
+            }
+        }
 
-	    //Initial cost matrix
-	    for(int i=0;i<n;i++){
-	        for(int j=0;j<n;j++){
-	            if(matrix[i][j]==-1)matrix[i][j]=1e9;
-	        }
-	    }
-	    
+        for (auto it : times) {
+            dist[it[0]][it[1]] = it[2];
+        }
 
-	    // check for miniumm distance every node to every other node via all distinct nodes
-	    for(int k=0;k<n;k++){
-	        for(int i=0;i<n;i++){
-	            for(int j=0;j<n;j++){
-	                matrix[i][j]=min(matrix[i][j],matrix[i][k]+matrix[k][j]);
-	            }
-	        }
-	    }
+        for (int it = 1; it <= n; it++) {
+            for (int row = 1; row <= n; row++) {
+                for (int col = 1; col <= n; col++) {
+                    int time = dist[row][it] + dist[it][col];
 
-	    for(int i = 0; i < n; i++){
-	    	for(int j = 0; j < n; j++){
-	    		if(matrix[i][j] < 0){
-	    			cout<<"Negative cycle exists.\n";
-	    		}
-	    	}
-	    }
-	    
-	    for(int i=0;i<n;i++){
-	        for(int j=0;j<n;j++){
-	            if(matrix[i][j]==1e9)matrix[i][j]=-1;
-	        }
-	    }
-	}
+                    if (time < dist[row][col]) {
+                        dist[row][col] = time;
+                    }
+                }
+            }
+        }
+
+        for (int idx = 1; idx <= n; idx++) {
+            if (dist[idx][idx] < 0)
+                return -1; // negative cycle
+        }
+
+        int totalTime = 0;
+
+        for (int idx = 1; idx <= n; idx++) {
+            if (dist[k][idx] >= 1e9)
+                return -1;            // can't reach to ith node
+            
+            totalTime = max(totalTime, dist[k][idx]);
+        }
+
+        return totalTime ;
+    }
 };
-
-//{ Driver Code Starts.
-int main(){
-	int tc;
-	cin >> tc;
-	while(tc--){
-		int n;
-		cin >> n;
-		vector<vector<int>>matrix(n, vector<int>(n, -1));
-		for(int i = 0; i < n; i++){
-			for(int j = 0; j < n; j++){
-				cin >> matrix[i][j];
-			}
-		}
-		Solution obj;
-		obj.shortest_distance(matrix);
-		for(int i = 0; i < n; i++){
-			for(int j = 0; j < n; j++){
-				cout << matrix[i][j] << " ";
-			}
-			cout << "\n";
-		}
-	}
-	return 0;
-}
-// } Driver Code Ends
 
 // Time Complexity:
 

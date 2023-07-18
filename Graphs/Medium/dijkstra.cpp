@@ -1,170 +1,98 @@
-// Implementing Dijkstra Algorithm
-// Note: The Graph doesn't contain 
-// MediumAccuracy: 50.83%Submissions: 88K+Points: 4
-// Lamp
-// Stand out from the crowd. Prepare with Complete Interview Preparation  
+// /743. Network Delay Time
+// Medium
+// 6.6K
+// 336
+// Companies
 
-// Given a weighted, undirected and connected graph of V vertices and an adjacency list adj where adj[i] is a list of lists containing two integers where the first integer of each list j denotes there is edge between i and j , second integers corresponds to the weight of that  edge . You are given the source vertex S and You to Find the shortest distance of all the vertex's from the source vertex S. You have to return a list of integers denoting shortest distance between each node and Source vertex S.
-//  
-any negative weight cycle.
+// You are given a network of n nodes, labeled from 1 to n. You are also given times, a list of travel times as directed edges times[i] = (ui, vi, wi), where ui is the source node, vi is the target node, and wi is the time it takes for a signal to travel from source to target.
 
-//  
+// We will send a signal from a given node k. Return the minimum time it takes for all the n nodes to receive the signal. If it is impossible for all the n nodes to receive the signal, return -1.
+
+ 
 
 // Example 1:
 
-// Input:
-// V = 2
-// adj [] = {{{1, 9}}, {{0, 9}}}
-// S = 0
-// Output:
-// 0 9
-// Explanation:
-
-// The source vertex is 0. Hence, the shortest 
-// distance of node 0 is 0 and the shortest 
-// distance from node 1 is 9.
-
-//  
+// Input: times = [[2,1,1],[2,3,1],[3,4,1]], n = 4, k = 2
+// Output: 2
 
 // Example 2:
 
-// Input:
-// V = 3, E = 3
-// adj = {{{1, 1}, {2, 6}}, {{2, 3}, {0, 1}}, {{1, 3}, {0, 6}}}
-// S = 2
-// Output:
-// 4 3 0
-// Explanation:
+// Input: times = [[1,2,1]], n = 2, k = 1
+// Output: 1
 
-// For nodes 2 to 0, we can follow the path-
-// 2-1-0. This has a distance of 1+3 = 4,
-// whereas the path 2-0 has a distance of 6. So,
-// the Shortest path from 2 to 0 is 4.
-// The shortest distance from 0 to 1 is 1 .
+// Example 3:
 
-//  
+// Input: times = [[1,2,1]], n = 2, k = 2
+// Output: -1
 
-// Your Task:
-// You don't need to read input or print anything. Your task is to complete the function dijkstra()  which takes the number of vertices V and an adjacency list adj as input parameters and Source vertex S returns a list of integers, where ith integer denotes the shortest distance of the ith node from the Source node. Here adj[i] contains a list of lists containing two integers where the first integer j denotes that there is an edge between i and j and the second integer w denotes that the weight between edge i and j is w.
+ 
 
-//  
+// Constraints:
 
-// Expected Time Complexity: O(V2).
-// Expected Auxiliary Space: O(V2).
+//     1 <= k <= n <= 100
+//     1 <= times.length <= 6000
+//     times[i].length == 3
+//     1 <= ui, vi <= n
+//     ui != vi
+//     0 <= wi <= 100
+//     All the pairs (ui, vi) are unique. (i.e., no multiple edges.)
 
-//{ Driver Code Starts
-#include<bits/stdc++.h>
-using namespace std;
+// Accepted
+// 394.2K
+// Submissions
+// 753.2K
+// Acceptance Rate
+// 52.3%
 
-// } Driver Code Ends
+// can't detect cycles with -ve cycle sum
 
-// **********************Dijkstras alogrithm will not work for graph with negative edge****************************
-class Solution
-{
-	public:
-	//Function to find the shortest distance of all the vertices
-    //from the source vertex S.
+class Solution {
+public:
+    int networkDelayTime(vector<vector<int>>& times, int n, int k) {
+        vector<pair<int, int>> adj[n + 1];
 
-		// ********************Time complexity --> ElogV
-    vector <int> dijkstra(int V, vector<vector<int>> adj[], int S)
-    {
-        priority_queue<pair<int,int>,vector<pair<int,int>>,greater<pair<int,int>>>pq;
-        vector<int>dis(V);
-        for(auto &e:dis)e=1e9;
+        for (auto it : times) {
+            adj[it[0]].push_back({it[1], it[2]});
+        }
         
-        dis[S]=0;
-        pq.push({0,S});
-        
-        while(!pq.empty()){
-            int len=pq.top().first;
-            int node=pq.top().second;
-            pq.pop();
-            
-            for(auto e:adj[node]){
-                int adjNode=e[0];
-                int weight=e[1];
-                
-                if(dis[adjNode]>len+weight){
-                    dis[adjNode]=len+weight;
-                    pq.push({len+weight,adjNode});
+        int totalTime = 0;
+        vector<int> dist(n + 1, 1e9);
+        dist[k] = 0;
+
+        priority_queue<pair<int, pair<int, int>>, vector<pair<int, pair<int, int>>>, greater<pair<int, pair<int, int>>>> pq;
+
+        pq.push({0, {k, k}});
+
+        while (!pq.empty()) {
+            int size = pq.size();
+
+            while (size--) {
+                auto it = pq.top();
+                pq.pop();
+
+                int w = it.first, u = it.second.first, v = it.second.second;
+
+                for (auto [node, weight] : adj[v]) {
+                    int distance = weight + w;
+
+                    if (distance < dist[node]) {
+                        dist[node] = distance;
+                        pq.push({distance, {v, node}});
+                    }
                 }
             }
         }
-        
-        return dis;
-    }
 
-    // **********using set***********
-     // set<pair<int,int>>s;
-     //    vector<int>dist(V);
-     //    for(auto &e:dist)e=1e9;
-        
-     //    s.insert({0,S});
-     //    dist[S]=0;
-        
-     //    while(!s.empty()){
-     //        auto it=*(s.begin());
-     //        int node=it.second;
-     //        int len=it.first;
-     //        s.erase(it);
-     //        for(auto e:adj[node]){
-     //            int weight=e[1];
-     //            int nextNode=e[0];
-                
-     //            if(dist[nextNode]>len+weight){
-     //                if(dist[nextNode]!=1e9){
-     //                    s.erase({dist[nextNode],nextNode});
-     //                }
-     //                dist[nextNode]=len+weight;
-     //                s.insert({len+weight,nextNode});
-     //            }
-     //        }
-     //    }
-        
-     //    return dist;
-};
+        for (int idx = 1; idx <= n; idx++) {
+            if (dist[idx] >= 1e9)
+                return -1;              // ith node is unreachable
 
-
-//{ Driver Code Starts.
-
-
-int main()
-{
-    int t;
-    cin >> t;
-    while (t--) {
-        int V, E;
-        cin >> V >> E;
-        vector<vector<int>> adj[V];
-        int i=0;
-        while (i++<E) {
-            int u, v, w;
-            cin >> u >> v >> w;
-            vector<int> t1,t2;
-            t1.push_back(v);
-            t1.push_back(w);
-            adj[u].push_back(t1);
-            t2.push_back(u);
-            t2.push_back(w);
-            adj[v].push_back(t2);
+            totalTime = max(totalTime, dist[idx]);
         }
-        int S;
-        cin>>S;
         
-        Solution obj;
-    	vector<int> res = obj.dijkstra(V, adj, S);
-    	
-    	for(int i=0; i<V; i++)
-    	    cout<<res[i]<<" ";
-    	cout<<endl;
+        return totalTime;
     }
-
-    return 0;
-}
-
-
-// } Driver Code Ends
-
+};
 
 // Time Complexity:
 

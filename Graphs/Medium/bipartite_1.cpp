@@ -35,6 +35,9 @@
 // Constraints:
 // 1 ≤ V, E ≤ 105
 
+// Acylic and graph with even cycle length are always biaprtite
+// we can divide bipartite graph nodes in two sets such that any two adjacent nodes does not belong to same set
+
 //{ Driver Code Starts
 #include<bits/stdc++.h>
 using namespace std;

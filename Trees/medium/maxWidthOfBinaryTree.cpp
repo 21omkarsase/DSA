@@ -57,44 +57,58 @@
 // Binary Tree
 // Copyright ©️ 2023 LeetCode All rights reserved
 
+// Time Complexity : O(N)
+// Space Complexity : O(N)
+
 class Solution {
 public:
     int widthOfBinaryTree(TreeNode* root) {
-        if(!root) return 0;
+        if (!root)
+            return 0;
 
-        if(!root->left && !root->right) return 1;
-        
-        queue<pair<int, TreeNode *>>q;
+        queue<pair<int, TreeNode*>> q;
         q.push({0, root});
-        
-        int width = 0;
-        while(!q.empty()){
+
+        int maxWidth = 0;
+
+        while (!q.empty()) {
             int size = q.size();
             int minIdx = q.front().first;
-            
-            long long first, last;
-            for(int i = 0; i < size; i++){
-                TreeNode *node = q.front().second;
-                long long idx = q.front().first - minIdx;
+
+            int first, last;
+
+            for (int k = 0; k < size; k++) {
+                int idx = q.front().first - minIdx;
+                TreeNode* node = q.front().second;
+                
                 q.pop();
 
-                if(i == 0) first = idx;
-                if(i == size - 1) last = idx;
+                if (k == 0)
+                    first = idx;
 
-                if(node->left){
-                    q.push({(2 * idx) + 1, node->left});
+                if (k == size - 1)
+                    last = idx;
+                
+                if (node->left) {
+                    q.push({(long long) 2 * idx  + 1, node->left});
                 }
-
-                if(node->right){
-                    q.push({(2 * idx) + 2, node->right});
+                
+                if (node->right) {
+                    q.push({(long long) 2 * idx  + 2, node->right});
                 }
             }
-            if(width < last - first + 1) width = last - first + 1;
+
+            maxWidth = max(maxWidth, last - first + 1);
         }
 
-        return width;
+        return maxWidth;
     }
 };
+
+//                                       (0)a(0)
+//                 (2*0 + 1)b(1)                            (2*0 + 2)c(2)
+// (2*1 + 1)d(3)                (2*1 + 2)e(4)    (2*2 + 1)f(5)         (2*2 + 1)g(6)
+
 
 
 
