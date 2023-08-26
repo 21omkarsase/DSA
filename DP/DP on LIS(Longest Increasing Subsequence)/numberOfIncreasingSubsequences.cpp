@@ -1,72 +1,83 @@
+// 673. Number of Longest Increasing Subsequence
+// Medium
+// 5.4K
+// 221
+// Companies
+
+// Given an integer array nums, return the number of longest increasing subsequences.
+
+// Notice that the sequence has to be strictly increasing.
+
+ 
+
+// Example 1:
+
+// Input: nums = [1,3,5,4,7]
+// Output: 2
+// Explanation: The two longest increasing subsequences are [1, 3, 4, 7] and [1, 3, 5, 7].
+
+// Example 2:
+
+// Input: nums = [2,2,2,2,2]
+// Output: 5
+// Explanation: The length of the longest increasing subsequence is 1, and there are 5 increasing subsequences of length 1, so output 5.
+
+ 
+
+// Constraints:
+
+//     1 <= nums.length <= 2000
+//     -106 <= nums[i] <= 106
+
+// Accepted
+// 163.4K
+// Submissions
+// 367.7K
+// Acceptance Rate
+// 44.4%
+
 class Solution {
 public:
     int findNumberOfLIS(vector<int>& nums) {
         int n = nums.size();
 
-        vector<int> dp(n, 1), lisCount(n, 1);
+        vector<int> dp(n, 1); //for storing LIS till ith idx;
+        vector<int> cnt(n , 1); // for storing count of lis till ith idx;
+        
+        int lisLength = 0;
 
-        for(int idx1 = 1; idx1 < n; idx1++){
-            for(int idx2 = 0; idx2 < idx1; idx2++){
-                if(nums[idx1] > nums[idx2]){
-                    if(dp[idx2] + 1 > dp[idx1])
-                        dp[idx1] = dp[idx2] + 1, lisCount[idx1] = lisCount[idx2];
-                    else if(dp[idx2] + 1 == dp[idx1])
-                        dp[idx1] = dp[idx2] + 1, lisCount[idx1] += lisCount[idx2]; 
+        for (int idx = 0; idx < n; idx++) {
+            for (int prev = 0; prev < idx; prev++) {
+                if (nums[idx] > nums[prev]) {
+                    if (dp[idx] < dp[prev] + 1) { 
+                        //if we get lis length better than previous lis length
+                        //as we are first time getting this lis length
+                        //count will reset to lis count of prev
+                        dp[idx] = dp[prev] + 1;
+                        cnt[idx] = cnt[prev]; 
+                    } else if(dp[idx] == dp[prev] + 1) {
+                        //we are getting same lis length
+                        //so we will add prev lis count to curr lis count
+                        cnt[idx] += cnt[prev];
+                    }
                 }
             }
-        }
-        
-        int maxLisCount = 0, maxLisSize = *max_element(dp.begin(), dp.end());
 
-        for(int idx = 0; idx < n; idx++){
-            if(dp[idx] == maxLisSize){
-                maxLisCount += lisCount[idx];
+            lisLength = max(lisLength, dp[idx]);
+        }
+
+        // lisLenth  -> stores longest increasing length
+        // we might have got lisLength at diff indexes 
+        // for which have lis count for those indexes
+        
+        int totalNoOfLIS = 0;
+
+        for (int idx = 0; idx < n; idx++) {
+            if (dp[idx] == lisLength) {
+                totalNoOfLIS += cnt[idx];
             }
         }
-        
 
-        return maxLisCount;
+        return totalNoOfLIS;
     }
 };
-
-#include<bits/stdc++.h>
-using namespace std;
-
-int findNumberOfLIS(vector<int>& nums) {
-    int n = nums.size();
-    vector<int> dp(n, 1), cnt(n, 1);
-    
-    if(n == 1) return 1;
-    
-    int ans = 1;
-    for(int i = 0; i < n; i++){
-        for(int j = 0; j < i; j++){
-            if(nums[i] > nums[j]){
-                if(dp[j] + 1 > dp[i]){
-                    dp[i] = dp[j] + 1;
-                    cnt[i] = cnt[j];
-                }else if(dp[j] + 1 == dp[i]) 
-                    cnt[i] += cnt[j];
-            }
-        }
-        if(dp[i] > ans)
-            ans = dp[i];
-    }
-
-    int nos = 0;
-    for(int i = 0; i < n; i++)
-        if(dp[i] == ans) nos += cnt[i];
-
-    return nos;
-}
-
-int main(){
-	int n;cin>>n;
-
-	vector<int> nums(n, 0);
-	for(auto &e : nums) cin >> e;
-
-	cout<<findNumberOfLIS(nums)<<"\n";
-	
-	return 0;
-}

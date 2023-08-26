@@ -17,53 +17,58 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-class Disjoint{
-	vector<int>size, parent;
+class Disjoint {
+    vector<int> size, parent;
+
 public:
-	Disjoint(int n){
-		size.resize(n+1,1);
-		parent.resize(n+1);
-		for(int i=0;i<=n;i++){
-			parent[i]=i;
-		}
-	}
+    Disjoint(int n) {
+        size.resize(n, 1);
+        parent.resize(n);
+        for (int i = 0; i < n; i++) {
+            parent[i] = i;
+        }
+    }
 
-	int findParent(int node){
-		if(parent[node]==node)return node;
+    int findParent(int node) {
+        if (parent[node] == node) return node;
 
-		parent[node] = findParent(parent[node]);
-		return parent[node];
-	}
+        parent[node] = findParent(parent[node]);
+        return parent[node];
+    }
 
-	void unionMerge(int u,int v){
-		int ulp_u=findParent(u);
-		int ulp_v=findParent(v);
+    bool unionMerge(int u, int v) {
+        int ulp_u = findParent(u);
+        int ulp_v = findParent(v);
 
-		if(ulp_u == ulp_v)return ;
-        
-		if(size[ulp_u]>size[ulp_v]){
-			parent[ulp_v]=ulp_u; 
-			size[ulp_u]+=size[ulp_v];
-		}else{
-			parent[ulp_u]=ulp_v; 
-			size[ulp_v]+=size[ulp_u];
-		}
-	}
+        if (ulp_u == ulp_v) {
+            return false;
+        }
+
+        if (size[ulp_u] > size[ulp_v]) {
+            parent[ulp_v] = ulp_u;
+            size[ulp_u] += size[ulp_v];
+        } else {
+            parent[ulp_u] = ulp_v;
+            size[ulp_v] += size[ulp_u];
+        }
+
+        return true;
+    }
 };
 
 int main(){
 	Disjoint ds(7);
-    ds.unionBySize(1,2);
-    ds.unionBySize(2,3);
-    ds.unionBySize(4,5);
-    ds.unionBySize(6,7);
-    ds.unionBySize(5,6);
+    ds.unionMerge(1,2);
+    ds.unionMerge(2,3);
+    ds.unionMerge(4,5);
+    ds.unionMerge(6,7);
+    ds.unionMerge(5,6);
 
     if(ds.findParent(3) == ds.findParent(7))
     	cout<<"1 : Same\n";
     else cout<<"1 : No\n";
 
-    ds.unionBySize(3,7);
+    ds.unionMerge(3,7);
 
     if(ds.findParent(3) == ds.findParent(7))
     	cout<<"2 : Same\n";

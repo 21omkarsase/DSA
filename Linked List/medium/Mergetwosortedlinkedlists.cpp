@@ -1,175 +1,76 @@
-// Merge K sorted linked lists
-// MediumAccuracy: 41.42%Submissions: 56862Points: 4
-// Lamp
-// This problem is part of GFG SDE Sheet. Click here to view more.  
+// 21. Merge Two Sorted Lists
+// Easy
+// 19.6K
+// 1.8K
+// Companies
 
-// Given K sorted linked lists of different sizes. The task is to merge them in such a way that after merging they will be a single sorted linked list.
+// You are given the heads of two sorted linked lists list1 and list2.
 
-// Example 1:
+// Merge the two lists into one sorted list. The list should be made by splicing together the nodes of the first two lists.
 
-// Input:
-// K = 4
-// value = {{1,2,3},{4 5},{5 6},{7,8}}
-// Output: 1 2 3 4 5 5 6 7 8
-// Explanation:
-// The test case has 4 sorted linked 
-// list of size 3, 2, 2, 2
-// 1st    list     1 -> 2-> 3
-// 2nd   list      4->5
-// 3rd    list      5->6
-// 4th    list      7->8
-// The merged list will be
-// 1->2->3->4->5->5->6->7->8.
-// Example 2:
-
-// Input:
-// K = 3
-// value = {{1,3},{4,5,6},{8}}
-// Output: 1 3 4 5 6 8
-// Explanation:
-// The test case has 3 sorted linked
-// list of size 2, 3, 1.
-// 1st list 1 -> 3
-// 2nd list 4 -> 5 -> 6
-// 3rd list 8
-// The merged list will be
-// 1->3->4->5->6->8.
-// Your Task:
-// The task is to complete the function mergeKList() which merges the K given lists into a sorted one. The printing is done automatically by the driver code.
-
-// Expected Time Complexity: O(nk Logk)
-// Expected Auxiliary Space: O(k)
-// Note: n is the maximum size of all the k link list
-
-// Constraints
-// 1 <= K <= 103
+// Return the head of the merged linked list.
 
  
 
-// View Bookmarked Problems 
-// Company Tags
-// Topic Tags
+// Example 1:
 
+// Input: list1 = [1,2,4], list2 = [1,3,4]
+// Output: [1,1,2,3,4,4]
 
-//{ Driver Code Starts
-// C++ program to merge k sorted arrays of size n each
-#include <bits/stdc++.h>
-using namespace std;
+// Example 2:
 
-// A Linked List node
-struct Node
-{
-    int data;
-    Node* next;
-    
-    Node(int x){
-        data = x;
-        next = NULL;
-    }
-    
-};
+// Input: list1 = [], list2 = []
+// Output: []
 
-/* Function to print nodes in a given linked list */
-void printList(Node* node)
-{
-    while (node != NULL)
-    {
-        printf("%d ", node->data);
-        node = node->next;
-    }
-    cout<<endl;
-}
+// Example 3:
 
-// } Driver Code Ends
-/*Linked list Node structure
+// Input: list1 = [], list2 = [0]
+// Output: [0]
 
-struct Node
-{
-    int data;
-    Node* next;
-    
-    Node(int x){
-        data = x;
-        next = NULL;
-    }
-    
-};
-*/ 
+ 
 
-Node* mergeTwoSortedLinkedLists(Node*a,Node*b){
-    Node * dummy = new Node(-1);
-    Node* temp=dummy;
-    while(a!=NULL and b!=NULL){
-        if(a->data<b->data){
-            temp->next=a;
-            a=a->next;
-        }else{
-            temp->next=b;
-            b=b->next;
+// Constraints:
+
+//     The number of nodes in both lists is in the range [0, 50].
+//     -100 <= Node.val <= 100
+//     Both list1 and list2 are sorted in non-decreasing order.
+
+// Accepted
+// 3.4M
+// Submissions
+// 5.5M
+// Acceptance Rate
+// 63.0%
+
+class Solution {
+public:
+    ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
+        ListNode *dummy = new ListNode(-101);
+
+        ListNode *ptr1 = list1, *ptr2 = list2;
+        ListNode *ptr = dummy;
+
+        while (ptr1 && ptr2) {
+            if (ptr1->val < ptr2->val) {
+                ptr->next = ptr1;
+                ptr1 = ptr1->next;
+            }
+            else {
+                ptr->next = ptr2;
+                ptr2 = ptr2->next;
+            }
+
+            ptr = ptr ->next;
         }
-        temp=temp->next;
-    }
-    
-    if(a!=NULL)
-        temp->next=a;
-    else
-        temp->next=b;
-    
-    return dummy->next;
-}
 
-class Solution{
-  public:
-    //Function to merge K sorted linked list.
-    Node * mergeKLists(Node *arr[], int k)
-    {
-        Node* prev=arr[0];
-        for(int i=1;i<k;i++){
-            prev=mergeTwoSortedLinkedLists(prev,arr[i]);
+        if (ptr1) {
+            ptr->next = ptr1;
         }
-        return prev;
+
+        if (ptr2) {
+            ptr->next = ptr2;
+        }
+
+        return dummy->next;
     }
 };
-
-
-
-//{ Driver Code Starts.
-// Driver program to test above functions
-int main()
-{
-   int t;
-   cin>>t;
-   while(t--)
-   {
-       int N;
-       cin>>N;
-       struct Node *arr[N];
-       for(int j=0;j<N;j++)
-        {
-           int n;
-           cin>>n;
-
-           int x;
-           cin>>x;
-           arr[j]=new Node(x);
-           Node *curr = arr[j];
-           n--;
-
-           for(int i=0;i<n;i++)
-           {
-               cin>>x;
-               Node *temp = new Node(x);
-               curr->next =temp;
-               curr=temp;
-           }
-        }
-        Solution obj;
-        Node *res = obj.mergeKLists(arr,N);
-        printList(res);
-
-   }
-
-    return 0;
-}
-
-// } Driver Code Ends

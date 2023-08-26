@@ -59,82 +59,49 @@
 //     The source and destination cells are always inside the given matrix.
 //     The source and destination cells always contain 1.
 
-
-//{ Driver Code Starts
-// Initial Template for C++
-
-#include <bits/stdc++.h>
-using namespace std;
-
-
-// } Driver Code Ends
-// User function Template for C++
+// Time Complexity : O(N*M)
+// Space Complexity : O(N*M)
 
 class Solution {
+    vector<pair<int, int>> dirs = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
+    
+    bool isValid(int row, int col, int n, int m) {
+        return row >= 0 && col >= 0 && row < n && col < m;
+    }
+    
   public:
-    int shortestPath(vector<vector<int>> &grid, pair<int, int> source, pair<int, int> destination) {
-        int n=grid.size();
-        int m=grid[0].size();
+    int shortestDistance(int N, int M, vector<vector<int>> A, int X, int Y) {
+        if (A[0][0] == 0) {
+            return -1;
+        }
         
-        queue<pair<int,pair<int,int>>>q;
-        vector<vector<int>>dist(n,vector<int>(m,1e9));
-        dist[source.first][source.second]=0;
-        q.push({0,{source.first,source.second}});
+        queue<pair<int, pair<int, int>>> q;
+        vector<vector<int>> visited(N, vector<int>(M, 0));
         
-        int dr[4]={-1,0,1,0};
-        int dc[4]={0,1,0,-1};
+        q.push({0, {0, 0}});
+        visited[0][0] = 1;
         
-        while(!q.empty()){
-            auto it=q.front();
-            int len=it.first;
-            int r=it.second.first;
-            int c=it.second.second;
+        while (!q.empty()) {
+            int dist = q.front().first;
+            int row = q.front().second.first;
+            int col = q.front().second.second;
             
             q.pop();
             
-            for(int i=0;i<4;i++){
-                int newr=r+dr[i];
-                int newc=c+dc[i];
+            if (row == X && col == Y) {
+                return dist;
+            }
+            
+            for (auto dir: dirs) {
+                int nRow = row + dir.first, nCol = dir.second + col;
                 
-                if(newr>=0 && newr<n && newc>=0 && newc<m && dist[newr][newc]>len+1 && grid[newr][newc]==1){
-                    dist[newr][newc]=len+1;
-                    if(newr==destination.first && newc==destination.second){
-                        return len+1;
-                    }
-                    q.push({len+1,{newr,newc}});
+                if (isValid(nRow, nCol, N, M) && visited[nRow][nCol] == 0 && A[nRow][nCol] == 1) {
+                    q.push({dist + 1, {nRow, nCol}});
+                    visited[nRow][nCol] = 1;
                 }
             }
         }
-        if(source.first==destination.first && source.second==destination.second) 
-            return 0; 
-
+        
         return -1;
     }
 };
-
-
-//{ Driver Code Starts.
-int main() {
-
-    int t;
-    cin >> t;
-    while (t--) {
-        int n, m;
-        cin >> n >> m;
-        vector<vector<int>> grid(n, vector<int>(m));
-
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
-                cin >> grid[i][j];
-            }
-        }
-
-        pair<int, int> source, destination;
-        cin >> source.first >> source.second;
-        cin >> destination.first >> destination.second;
-        Solution obj;
-        cout << obj.shortestPath(grid, source, destination) << endl;
-    }
-}
-
-// } Driver Code Ends

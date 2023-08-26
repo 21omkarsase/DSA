@@ -47,6 +47,47 @@
 // Acceptance Rate
 // 32.8%
 
+class Solution {
+public:
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        int n = nums.size();
+        sort(nums.begin(), nums.end());
+        
+        set<vector<int>> uniqueThreeSums;
+
+        for (int idx = 0; idx < n; idx++) {
+            int left = idx + 1, right = n - 1;
+            int sum = nums[idx];
+
+            while (left < right) {
+                int totalSum = sum + nums[left] + nums[right];
+
+                if (totalSum == 0) {
+                    uniqueThreeSums.insert({nums[idx], nums[left], nums[right]});
+                    
+                    left++, right--;
+
+                    if (nums[idx] + nums[left] + nums[right] > 0) {
+                        right--;
+                    }
+                    else if (nums[idx] + nums[left] + nums[right] < 0){
+                        left++;
+                    }
+                }
+                else if (totalSum > 0) {
+                    right--;
+                }
+                else {
+                    left++;
+                }
+            }
+        } 
+
+        vector<vector<int>> threeSumResult(uniqueThreeSums.begin(), uniqueThreeSums.end());
+
+        return threeSumResult;
+    }
+};
 
 class Solution {
 public:

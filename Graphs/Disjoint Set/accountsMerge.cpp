@@ -44,79 +44,110 @@
 // Acceptance Rate
 // 56.3%
 
+// Time Complexity : O(N^2*M)
+// Space Complexity : O(N)
 
-class Disjoint{
-    vector<int>size, parent;
+class DSU{
+    vector<int> parent;
+    vector<int> size;
+
 public:
-    Disjoint(int n){
-        size.resize(n+1,1);
-        parent.resize(n+1);
-        for(int i=0;i<=n;i++){
-            parent[i]=i;
+    DSU(int n) {
+        parent.resize(n);
+        size.resize(n, 1);
+
+        for (int node = 0; node < n; node++) {
+            parent[node] = node;
         }
     }
 
-    int findParent(int node){
-        if(parent[node]==node)return node;
+    int findParent(int node) {
+        if (parent[node] == node) {
+            return node;
+        }
 
         parent[node] = findParent(parent[node]);
+
         return parent[node];
     }
 
-    void unionBySize(int u,int v){
-        int ulp_u=findParent(u);
-        int ulp_v=findParent(v);
+    void unionMerge(int u, int v) {
+        int ulp_u = findParent(u);
+        int ulp_v = findParent(v);
 
-        if(ulp_u == ulp_v)return ;
-        
-        if(size[ulp_u]>size[ulp_v]){
-            parent[ulp_v]=ulp_u; 
-            size[ulp_u]+=size[ulp_v];
-        }else{
-            parent[ulp_u]=ulp_v; 
-            size[ulp_v]+=size[ulp_u];
+        if (ulp_u == ulp_v) {
+            return;
+        }
+
+        if (size[ulp_u] > size[ulp_v]) {
+            parent[ulp_u] = ulp_v;
+            size[ulp_v] += ulp_u;
+        }
+        else {
+            parent[ulp_v] = ulp_u;
+            size[ulp_u] += size[ulp_v];
         }
     }
+
+    void getMergedAccounts(vector<vector<string>> &accounts, vector<vector<string>> &mergedAccounts) {
+        int n = accounts.size();
+        vector<bool> visited(n, 0);
+
+        for (int idx1 = 0; idx1 < n; idx1++) {
+            int parent1 = findParent(idx1);
+
+            if (!visited[idx1]) {
+                set<string> mails;
+
+                for (int idx2 = idx1; idx2 < n; idx2++) {
+                    int parent2 = findParent(idx2);
+                    
+                    if (parent1 == parent2) {
+                        for (int mail = 1; mail < accounts[idx2].size(); mail++) {
+                            mails.insert(accounts[idx2][mail]);
+                        }
+                        
+                        visited[idx2] = 1;
+                    }
+                }
+
+                vector<string> mergedAccount = {accounts[idx1][0]};
+
+                for (auto mail : mails) {
+                    mergedAccount.push_back(mail);
+                }
+
+                mergedAccounts.push_back(mergedAccount);
+            }
+        }
+    }
+
+
 };
 
 class Solution {
 public:
     vector<vector<string>> accountsMerge(vector<vector<string>>& accounts) {
         int n = accounts.size();
-        map<string, int>mail;
+        unordered_map<string, int>mail;
 
-        Disjoint *ds = new Disjoint(n);
-        for(int i = 0; i < n; i++){
-            for(int j = 1; j < accounts[i].size(); j++){
-                if(mail.find(accounts[i][j]) == mail.end()){
-                    mail[accounts[i][j]] = i; 
-                }else{
-                    ds->unionBySize(mail[accounts[i][j]], i);
+        DSU ds(n);
+
+        for(int idx1 = 0; idx1 < n; idx1++){
+            for(int idx2 = 1; idx2 < accounts[idx1].size(); idx2++){
+                if(mail.find(accounts[idx1][idx2]) == mail.end()){
+                    mail[accounts[idx1][idx2]] = idx1; 
+                }
+                else{
+                    ds.unionMerge(mail[accounts[idx1][idx2]], idx1);
                 }
             }
         }
+        
+        vector<vector<string>> mergedAccounts;
+        ds.getMergedAccounts(accounts, mergedAccounts);
 
-        vector<string> mergedAccounts[n];
-        for(auto p : mail){
-            int parent = ds->findParent(p.second);
-            mergedAccounts[parent].push_back(p.first);
-        }
-
-        vector<vector<string>> ans;
-        for(int i = 0; i < n; i++){
-            if(mergedAccounts[i].size() == 0){
-                continue;
-            }
-            sort(mergedAccounts[i].begin(), mergedAccounts[i].end());
-            vector<string>temp;
-            temp.push_back(accounts[i][0]);
-            for(auto email : mergedAccounts[i]){
-                temp.push_back(email);
-            }
-            ans.push_back(temp);
-        }
-
-        return ans;
+        return mergedAccounts;
     }
 };
 

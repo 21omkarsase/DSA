@@ -53,29 +53,34 @@
 // checking for all possible subsets will give tle
 // since we are only interested in max and min of every subset
 // sorting the array will not affect 
+// 3 5 7 10
+// for all subsets of 10->
+// ans += (10 ^ 2) * (10) + (10 ^ 2) * (7) + (10 ^ 2) * (5 + 5) + (10 ^ 2) * (3 + 3 + 3 + 3) 
+// ans += (10 ^ 2) (7 + 5 + 5 + 5 + 3 + 3 + 3 + 3)
 
-int mod = 1000000007;
+// use prefix sum variable to store sum of all nums ->(num(0) * freq(num(0)) to (num(i - 1) * freq(num(i - 1)) till curr num
+
+int MOD = 1e9 + 7;
 
 class Solution {
 public:
     int sumOfPower(vector<int>& nums) {
         int n = nums.size();
 
+        vector<int> sortedNums = nums;
+        sort(sortedNums.begin(), sortedNums.end());
+        
+        int prefix = 0;
         int sum = 0;
-        int prevSum = 0;
 
-        vector<int> numsSorted(nums.begin(), nums.end());
-        sort(numsSorted.begin(), numsSorted.end());
+        for (int idx = 0; idx < n; idx++) {
+            int prev = ((long long) ((long long) sortedNums[idx] * sortedNums[idx]) % MOD * prefix) % MOD;
+            int curr = ((long long) ((long long) sortedNums[idx] * sortedNums[idx]) % MOD * sortedNums[idx]) % MOD;
 
-        for (auto num : numsSorted) {
-            int numSquare = ((long long) num * num) % mod;
-
-            sum = (sum + (((long long) numSquare * num) % mod)) % mod;
-            sum = (sum + (((long long) numSquare * prevSum) % mod)) % mod;
-
-            prevSum = (((long long) prevSum * 2) % mod + num) % mod;
+            sum = ((long long) sum + prev + curr) % MOD;
+            prefix = ((long long) prefix * 2) % MOD + sortedNums[idx];
         }
 
-        return (int) sum;
+        return sum;
     }
 };
