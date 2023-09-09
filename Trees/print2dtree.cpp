@@ -51,7 +51,7 @@ public:
 		return root;
 	}
 
-	void print2DUtil(Node* root, int space)
+	void print2DUtil(Node* root, int space = 2)
 	{
 	    if (root == NULL)
 	        return;

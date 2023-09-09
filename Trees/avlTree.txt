@@ -1,0 +1,20 @@
+AVL Tree (self balancing)
+		 balanced binary search tree
+
+1. left left imbalance -> 
+	grand child in line of parent and child (left)
+    
+	a.right rotate on parent
+
+2. left right imbalance -> 
+    a. left rotate on child
+    b. right rotate on parent
+
+3. right right imbalance -> 
+	grand child in line of parent and child (right)
+    
+	a.left rotate on parent
+
+4. right left imbalance -> 
+    a. right rotate on child
+    b. left rotate on parent

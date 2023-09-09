@@ -1,139 +1,85 @@
-// Combination Sum
-//         MediumAccuracy : 50.0 %
-//     Submissions : 40707Points : 4 Given an array of integers and a sum B,
-//     find all unique combinations in the array where the sum is equal to B.The same number may be chosen from the array any number of times to make B.
+// 39. Combination Sum
+// Medium
+// 17.4K
+// 351
+// Companies
 
-//     Note : 1. All numbers will be positive integers.2. Elements in a
-//     combination(a1, a2, …, ak) must be in non-descending order. (ie, a1 ≤ a2 ≤ … ≤ ak).
-//         3. The combinations themselves must be sorted in ascending order.
+// Given an array of distinct integers candidates and a target integer target, return a list of all unique combinations of candidates where the chosen numbers sum to target. You may return the combinations in any order.
+
+// The same number may be chosen from candidates an unlimited number of times. Two combinations are unique if the
+// frequency
+// of at least one of the chosen numbers is different.
+
+// The test cases are generated such that the number of unique combinations that sum up to target is less than 150 combinations for the given input.
+
+ 
 
 // Example 1:
 
-// Input:
-// N = 4
-// arr[] = {7,2,6,5}
-// B = 16
-// Output:
-// (2 2 2 2 2 2 2 2)
-// (2 2 2 2 2 6)
-// (2 2 2 5 5)
-// (2 2 5 7)
-// (2 2 6 6)
-// (2 7 7)
-// (5 5 6)
+// Input: candidates = [2,3,6,7], target = 7
+// Output: [[2,2,3],[7]]
+// Explanation:
+// 2 and 3 are candidates, and 2 + 2 + 3 = 7. Note that 2 can be used multiple times.
+// 7 is a candidate, and 7 = 7.
+// These are the only two combinations.
+
 // Example 2:
 
-// Input:
-// N = 11
-// arr[] = {6,5,7,1,8,2,9,9,7,7,9}
-// B = 6
-// Output:
-// (1 1 1 1 1 1)
-// (1 1 1 1 2)
-// (1 1 2 2)
-// (1 5)
-// (2 2 2)
-// (6)
+// Input: candidates = [2,3,5], target = 8
+// Output: [[2,2,2,2],[2,3,3],[3,5]]
 
-// Your Task:
-// Your task is to complete the function combinationSum() which takes the array A and a sum B as inputs and returns a list of list denoting the required combinations in the order specified in the problem description. The printing is done by the driver's code. If no set can be formed with the given set, then  "Empty" (without quotes) is printed.
+// Example 3:
 
-// Expected Time Complexity: O(X2 * 2N), where X is average of summation B/arri for every number in the array.
-// Expected Auxiliary Space: O(X * 2N)
+// Input: candidates = [2], target = 1
+// Output: []
+
+ 
 
 // Constraints:
-// 1 <= N <= 30
-// 1 <= A[i] <= 20
-// 1 <= B <= 100
 
-// View Bookmarked Problems
-// Company Tags
-// AdobeAmazonMicrosoft
-// Topic Tags
-// BacktrackingRecursion
+//     1 <= candidates.length <= 30
+//     2 <= candidates[i] <= 40
+//     All elements of candidates are distinct.
+//     1 <= target <= 40
 
-//{ Driver Code Starts
-// Initial template for C++
+// Accepted
+// 1.6M
+// Submissions
+// 2.3M
+// Acceptance Rate
+// 69.8%
 
-#include <bits/stdc++.h>
-using namespace std;
+// Time Complexity : O(2^T * K) (k -> average length of combination array) (T not N (bcz an ele can be picked multple times. T >= N))
+// Space Complexity : O(K * X) (X -> no. of combinations) 
 
-// } Driver Code Ends
-// User function template for C++
 
-class Solution
-{
-public:
-    void getAllCombinations(vector<vector<int>> &ans, vector<int> v, vector<int> t, int s, int i)
-    {
-        if (s == 0)
-        {
-            ans.push_back(t);
+class Solution {
+    void calculateTotalCombinations(int idx, int target, vector<int> &combination, const vector<int> &candidates, vector<vector<int>> &combinations) {
+        if (idx == candidates.size()) {
+            if (target == 0) {
+                combinations.push_back(combination);
+            }
+
             return;
         }
 
-        while (i < v.size() and s - v[i] >= 0)
-        {
-            t.push_back(v[i]);
-            getAllCombinations(ans, v, t, s - v[i], i); //#adding same ele until sum<=0
-            t.pop_back();
-            i++; // only inc i when we done with that part ele for that pos
+        if (candidates[idx] <= target) {
+            combination.push_back(candidates[idx]);
+            
+            calculateTotalCombinations(idx, target - candidates[idx], combination, candidates, combinations);
+            
+            combination.pop_back();
         }
-    }
 
-    void getTaskDone(vector<vector<int>> &ans, vector<int> v, int s)
-    {
-        vector<int> t;
-        sort(v.begin(), v.end());
-        v.erase(unique(v.begin(), v.end()), v.end()); // removing duplicates
-        getAllCombinations(ans, v, t, s, 0);
+        calculateTotalCombinations(idx + 1, target, combination, candidates, combinations);
     }
+public:
+    vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
+        vector<int> combination;
+        vector<vector<int>> combinations;
 
-    vector<vector<int>>
-    combinationSum(vector<int> &A, int B)
-    {
-        vector<vector<int>> ans;
-        getTaskDone(ans, A, B);
-        return ans;
+        calculateTotalCombinations(0, target, combination, candidates, combinations);
+        
+        return combinations;
     }
 };
-
-//{ Driver Code Starts.
-int main()
-{
-    int t;
-    cin >> t;
-    while (t--)
-    {
-        int n;
-        cin >> n;
-        vector<int> A;
-        for (int i = 0; i < n; i++)
-        {
-            int x;
-            cin >> x;
-            A.push_back(x);
-        }
-        int sum;
-        cin >> sum;
-        Solution ob;
-        vector<vector<int>> result = ob.combinationSum(A, sum);
-        if (result.size() == 0)
-        {
-            cout << "Empty";
-        }
-        for (int i = 0; i < result.size(); i++)
-        {
-            cout << '(';
-            for (int j = 0; j < result[i].size(); j++)
-            {
-                cout << result[i][j];
-                if (j < result[i].size() - 1)
-                    cout << " ";
-            }
-            cout << ")";
-        }
-        cout << "\n";
-    }
-}
-// } Driver Code Ends

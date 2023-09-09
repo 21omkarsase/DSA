@@ -1,0 +1,50 @@
+TYPES 
+
+1. Complete Binary Tree
+        Every level is completely filled except last level
+        in last level nodes are filled from left to right (inclined to left)
+
+2. Full Binary Tree (Strict Binary Tree)     
+        Every node has either 0 children or 2 children
+
+3. Perfect Binary Tree
+        Every level is completely filled except last level
+        last level nodes has same depth(no children)
+
+        height = h ----> nodes = 2^(h + 1) - 1
+
+4. Balanced Binary Tree (AVL, Red Black Trees)
+        If height of the tree is O(Log(N)) -> N is the number of nodes
+
+5. Degenerate Binary Tree (Or Skewed Binary Tree)
+        Every node has single child
+
+
+6. Binary Search Tree
+	    The left subtree of a node contains only nodes with
+		    keys lesser than the node’s key.
+	    The right subtree of a node contains only nodes with 
+		    keys greater than the node’s key.
+	    The left and right subtree each must also be a 
+		    binary search tree.
+
+	Advantages of Binary search tree
+	    Searching an element is easy
+	    insertion and deletion operations are faster in BST.
+
+	    worst case time complexity : O(N)
+
+7. AVL:  
+	Height balanced binary search tree
+
+	worst case time complexity : O(LogN)
+
+
+
+
+
+Height Of The Node
+	The height of a node is the number of edges present in the longest path connecting that node to a leaf node.
+
+Depth Of The Node
+	The depth of a node is the number of edges present in path from the root node of a tree to that node.
