@@ -48,6 +48,18 @@
 // Acceptance Rate
 // 49.7%
 
+// Time Complexity : O(N)
+// Space Complexity : O(1)
+
+// slow pointer distance = l1 + l2
+// fast pointer distance = l1 + l2 + cx
+
+// 2 (d(slow)) = d(fast)
+// 2l1 + 2l2 = l1 + l2 + cx
+// l1 + l2 = cx 
+
+// l1 = cx - l2 --> (l1 = x - l2)
+
 class Solution {
 public:
     ListNode *detectCycle(ListNode *head) {

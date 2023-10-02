@@ -14,29 +14,40 @@
 
 // It's important to note that the time complexity analysis assumes that the data structure is balanced and the operations are performed on a reasonably balanced tree. However, in the worst-case scenario, where the tree becomes degenerate (e.g., a long chain), the time complexity can become linear.
 
+
+// Time Complexity : O(N * alpha(n))
+// Space Complexity : O(N)
+
+ // α(n), also known as the inverse Ackermann function, is an extremely slowly-growing function. 
+// for any reasonable value of n (even for astronomical values of n), α(n) is at most 4
+
+
 #include<bits/stdc++.h>
 using namespace std;
 
-class Disjoint {
-    vector<int> size, parent;
+class DSU {
+    vector<int> size;
+    vector<int> parent;
 
 public:
-    Disjoint(int n) {
+    DSU (int n) {
         size.resize(n, 1);
         parent.resize(n);
-        for (int i = 0; i < n; i++) {
-            parent[i] = i;
+
+        for (int idx = 0; idx < n; idx++) {
+            parent[idx] = idx;
         }
+    };
+
+    int findParent (int node) {
+        if (node == parent[node]) {
+            return node;
+        }
+
+        return parent[node] = findParent(parent[node]);
     }
 
-    int findParent(int node) {
-        if (parent[node] == node) return node;
-
-        parent[node] = findParent(parent[node]);
-        return parent[node];
-    }
-
-    bool unionMerge(int u, int v) {
+    bool unionMerge (int u, int v) {
         int ulp_u = findParent(u);
         int ulp_v = findParent(v);
 
@@ -47,7 +58,8 @@ public:
         if (size[ulp_u] > size[ulp_v]) {
             parent[ulp_v] = ulp_u;
             size[ulp_u] += size[ulp_v];
-        } else {
+        }
+        else {
             parent[ulp_u] = ulp_v;
             size[ulp_v] += size[ulp_u];
         }
@@ -57,7 +69,7 @@ public:
 };
 
 int main(){
-	Disjoint ds(7);
+	DSU ds(7);
     ds.unionMerge(1,2);
     ds.unionMerge(2,3);
     ds.unionMerge(4,5);

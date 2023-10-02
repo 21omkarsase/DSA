@@ -1,106 +1,68 @@
-//{ Driver Code Starts
-#include <bits/stdc++.h>
-using namespace std;
+// 94. Binary Tree Inorder Traversal
+// Solved
+// Easy
+// Topics
+// Companies
 
-struct Node {
-    int data;
-    struct Node* left;
-    struct Node* right;
+// Given the root of a binary tree, return the inorder traversal of its nodes' values.
+
+ 
+
+// Example 1:
+
+// Input: root = [1,null,2,3]
+// Output: [1,3,2]
+
+// Example 2:
+
+// Input: root = []
+// Output: []
+
+// Example 3:
+
+// Input: root = [1]
+// Output: [1]
+
+ 
+
+// Constraints:
+
+//     The number of nodes in the tree is in the range [0, 100].
+//     -100 <= Node.val <= 100
+
+ 
+// Follow up: Recursive solution is trivial, could you do it iteratively?
+// Accepted
+// 2.2M
+// Submissions
+// 2.9M
+// Acceptance Rate
+// 74.7%
+
+// Time Complexity : O(N)
+// Space Complexity : O(N)
+
+class Solution {
+public:
+    vector<int> inorderTraversal(TreeNode* root) {
+        vector<int> ans;
+        stack<TreeNode*> st;
+
+        TreeNode* curr = root;
+
+        while (curr || !st.empty()) {
+            if (curr) {
+                st.push(curr);
+                curr = curr->left;
+            }
+            else if (!st.empty()){
+                ans.push_back(st.top()->val);
+                curr = st.top()->right;
+
+                st.pop();
+            }
+        }
+
+        return ans;
+    }
 };
-// Utility function to create a new Tree Node
-Node* newNode(int val) {
-    Node* temp = new Node;
-    temp->data = val;
-    temp->left = NULL;
-    temp->right = NULL;
-
-    return temp;
-}
-// Function to Build Tree
-Node* buildTree(string str) {
-    // Corner Case
-    if (str.length() == 0 || str[0] == 'N') return NULL;
-
-    // Creating vector of strings from input
-    // string after spliting by space
-    vector<string> ip;
-
-    istringstream iss(str);
-    for (string str; iss >> str;) ip.push_back(str);
-
-    // Create the root of the tree
-    Node* root = newNode(stoi(ip[0]));
-
-    // Push the root to the queue
-    queue<Node*> queue;
-    queue.push(root);
-
-    // Starting from the second element
-    int i = 1;
-    while (!queue.empty() && i < ip.size()) {
-
-        // Get and remove the front of the queue
-        Node* currNode = queue.front();
-        queue.pop();
-
-        // Get the current node's value from the string
-        string currVal = ip[i];
-
-        // If the left child is not null
-        if (currVal != "N") {
-
-            // Create the left child for the current node
-            currNode->left = newNode(stoi(currVal));
-
-            // Push it to the queue
-            queue.push(currNode->left);
-        }
-
-        // For the right child
-        i++;
-        if (i >= ip.size()) break;
-        currVal = ip[i];
-
-        // If the right child is not null
-        if (currVal != "N") {
-
-            // Create the right child for the current node
-            currNode->right = newNode(stoi(currVal));
-
-            // Push it to the queue
-            queue.push(currNode->right);
-        }
-        i++;
-    }
-
-    return root;
-}
-//        1
-//      /  \
-//     3    2
-// Output: 3 1 2
-
-int minValue(Node* root);
-
-int main() {
-
-    int t;
-    scanf("%d ", &t);
-    while (t--) {
-        string s;
-        getline(cin, s);
-        Node* root = buildTree(s);
-        cout << minValue(root) << endl;
-    }
-    return 1;
-}
-// } Driver Code Ends
-
-
-// Function to find the minimum element in the given BST.
-int minValue(Node* root) {
-    if(root->left=NULL)return root->data;
-    
-    int val=minValue(root->left);
-    return val;
-}

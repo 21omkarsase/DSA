@@ -40,66 +40,81 @@
 // Acceptance Rate
 // 36.6%
 
+// Time Complexity : O((n1 + n2) / 2)
+// Space Complexity : O(1)
+
 class Solution {
-    int findMedian(int &p1, int &p2, vector<int> &nums1, vector<int> &nums2){
-        if(p1 < nums1.size() && p2 < nums2.size())
-            return nums1[p1] > nums2[p2] ? nums2[p2++] : nums1[p1++];
-        else if(p1 < nums1.size())
-            return nums1[p1++];
-        else
-            return nums2[p2++];
-    }
 public:
     double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
-        int n1 = nums1.size(), n2 = nums2.size();
-        int p1 = 0, p2 = 0;
+        int n = nums1.size(), m = nums2.size();
         
-        double firstMedEle;
-        for(int i = 0; i < (n1 + n2) / 2; i++){
-            firstMedEle = findMedian(p1, p2, nums1, nums2);
+        int prev = -1, curr = -1;
+        int idx1 = 0, idx2 = 0;
+
+        while (idx1 + idx2 < ((n + m) / 2) + 1) {
+            if (idx1 < n && (idx2 >= m || nums1[idx1] <= nums2[idx2])) {
+                prev = curr;
+                curr = nums1[idx1];
+                idx1++;
+            }
+            else if (idx2 < m && (idx1 >= n || nums2[idx2] <= nums1[idx1])) {
+                prev = curr;
+                curr = nums2[idx2];
+                idx2++;
+            }
         }
 
-        if((n1 + n2) & 1){
-            return findMedian(p1, p2, nums1, nums2);
-        }else{
-            double secondMedEle = findMedian(p1, p2, nums1, nums2);
-            return (firstMedEle + secondMedEle) / 2;
+        if ((n + m) & 1) {
+            return curr;
         }
 
+        return (prev + curr) / 2.0;
     }
 };
 
 
+// Time Complexity : O(Log(N + M))
+// Space Complexity : O(1)
+
 class Solution {
 public:
     double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
         int n1 = nums1.size(), n2 = nums2.size();
-        int low = 0, high = n1;
 
-         if(n1 > n2)
+        if (n1 > n2) {
             swap(nums1, nums2);
-        n1 = nums1.size(), n2 = nums2.size(), high = n1;
-
-        while(low <= high){
-            int mid1 = low + (high - low) / 2;
-            int mid2 = (n1 + n2 + 1) / 2 - mid1;
-
-            int left1 = mid1 == 0 ? INT_MIN : nums1[mid1 - 1];
-            int left2 = mid2 == 0 ? INT_MIN : nums2[mid2 - 1];
-
-            int right1 = mid1 == n1 ? INT_MAX : nums1[mid1];
-            int right2 = mid2 == n2 ? INT_MAX : nums2[mid2];
-
-            if(left1 <= right2 && left2 <= right1){
-                if((n1 + n2) % 2 == 0){
-                    return (double)(max(left1, left2) + min(right1, right2)) / 2;
-                }
-                return max(left1, left2);
-            }else if(left1 > right2){
-                high = mid1 - 1;
-            }else low = mid1 + 1;
+            
+            n1 = nums1.size(), n2 = nums2.size();
         }
 
-        return 0.0;
+        int low = 0, high = n1;
+
+        while (low <= high) {
+            int mid1 = low + (high - low) / 2;
+            int mid2 = (n1 + n2) / 2 - mid1;
+
+            int left1 = mid1 - 1 >= 0 ? nums1[mid1 - 1] : INT_MIN;
+            int left2 = mid2 - 1 >= 0 ? nums2[mid2 - 1] : INT_MIN;
+
+            int right1 = mid1 < n1 ? nums1[mid1] : INT_MAX;
+            int right2 = mid2 < n2 ? nums2[mid2] : INT_MAX;
+
+            if (left1 <= right2 && right1 >= left2) {
+                if ((n1 + n2) & 1) {
+                    return min(right1, right2);
+                }
+
+                return (max(left1, left2) + min(right1, right2)) / 2.0;
+            }
+
+            if (left1 > right2) {
+                high = mid1 - 1;
+            }
+            else {
+                low = mid1 + 1;
+            }
+        }
+
+        return 0;
     }
 };

@@ -44,6 +44,90 @@
 // Acceptance Rate
 // 56.0%
 
+// Time Complexity : O(goal * n^2)
+// space complexity : O(goal * n) + O(n)
+
+class Solution {
+    int MOD = 1e9 + 7;
+
+    int calculateTotalNumberOfPlaylists(int nums, const int &n, const int &goal, const int &k, unordered_map<int, set<int, greater<int>>> &tracker, vector<vector<int>>& dp) {
+        if (nums == goal) {
+            return tracker.size() >= n;
+        }
+
+        if (dp[nums][tracker.size()] != -1) {
+            return dp[nums][tracker.size()];
+        }
+
+        int playlists = 0;
+
+        for (int idx = 1; idx <= n; idx++) {
+            if ((nums < goal && tracker.find(idx) == tracker.end()) || (nums - *(tracker[idx].begin()) > k)) {
+                tracker[idx].insert(nums);
+
+                playlists = (playlists % MOD + calculateTotalNumberOfPlaylists(nums + 1, n, goal, k, tracker, dp) % MOD) % MOD;
+
+                tracker[idx].erase(nums);
+
+                if (tracker[idx].size() == 0) {
+                    tracker.erase(idx);
+                }
+            }
+        }
+
+        dp[nums][tracker.size()] = playlists;
+        return playlists;
+    }
+
+public:
+    int numMusicPlaylists(int n, int goal, int k) {
+        unordered_map<int, set<int, greater<int>>> tracker;
+        vector<vector<int>> dp(goal + 1, vector<int>(goal + 1, -1));
+
+        return calculateTotalNumberOfPlaylists(0, n, goal, k, tracker, dp);
+    }
+};
+
+
+
+// Time Complexity : O(N ^ Goal)
+// Space Complexity : O(N * Goal) + O(N)
+class Solution {
+    int calculateTotalNumberOfPlaylists(int nums, int time, const int &n, const int &goal, const int &k, unordered_map<int, set<int, greater<int>>> &tracker) {
+        if (nums == goal) {
+            return tracker.size() >= n;
+        }
+        
+        int playlists = 0;
+
+        for (int idx = 1; idx <= n; idx++) {
+            if ((nums < goal && tracker.find(idx) == tracker.end()) || (time - *(tracker[idx].begin()) > k)) {
+                tracker[idx].insert(time);
+
+                playlists += calculateTotalNumberOfPlaylists(nums + 1, time + 1, n, goal, k, tracker);
+           
+                tracker[idx].erase(time);
+
+                if(tracker[idx].size() == 0) {
+                    tracker.erase(idx);
+                }
+            }
+        }
+
+        return playlists;
+    }
+public:
+    int numMusicPlaylists(int n, int goal, int k) {
+        unordered_map<int, set<int, greater<int>>> tracker;
+
+        return calculateTotalNumberOfPlaylists(0, 1, n, goal, k, tracker);
+    }
+};
+
+// Time Complexity : O
+Space Complexity : O
+
+
 class Solution {
     int MOD = 1e9 + 7;
     

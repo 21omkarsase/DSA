@@ -20,7 +20,7 @@
 // Output: -1
 // Explanation: There's not substring "edu"
 // present in S.
-
+a
 
 // Your Task:
 // You don't need to read input or print anything. Your task is to complete the function search() which takes the string S and the string pat as inputs and returns an array denoting the start indices (1-based) of substring pat in the string S. 
@@ -38,8 +38,8 @@
 
 // Time Complexity : O(2N)
 // Space Complexity : O(N)
-class Solution
-{
+
+class Solution {
     vector<int> calculateZTable(const int &n, const int &m, const string &txt, const string &pat) {
         string temp = pat + '#' + txt;
         int len = temp.size();
@@ -64,25 +64,23 @@ class Solution
         
         return z;
     }
-    public:
-        vector <int> search(string pat, string txt)
-        {
-            int n = txt.size(), m = pat.size();
-            
-            vector<int> z = calculateZTable(n, m, txt, pat);
-            int len = z.size();
-            
-            vector<int> ans;
-            
-            for (int idx = 1; idx < len; idx++) {
-                if (z[idx] == m) {
-                    ans.push_back(idx - m);
-                }
+public:
+    vector <int> search(string pat, string txt) {
+        int n = txt.size(), m = pat.size();
+
+        vector<int> z = calculateZTable(n, m, txt, pat);
+        int len = z.size();
+        
+        vector<int> ans;
+        
+        for (int idx = 1; idx < len; idx++) {
+            if (z[idx] == m) {
+                ans.push_back(idx - m);
             }
-            
-            return ans;
         }
-     
+        
+        return ans;
+    }
 };
 
 
