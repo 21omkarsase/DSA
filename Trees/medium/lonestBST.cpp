@@ -96,7 +96,6 @@ Node* buildTree(string str) {
     // Starting from the second element
     int i = 1;
     while (!queue.empty() && i < ip.size()) {
-
         // Get and remove the front of the queue
         Node* currNode = queue.front();
         queue.pop();
